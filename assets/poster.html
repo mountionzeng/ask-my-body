@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ask My Body Poster</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1920px;
+    background: #f5f0e8;
+    font-family: 'Noto Serif SC', serif;
+    color: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    padding: 80px 72px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ink wash circle bg */
+  body::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    right: -200px;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(26,26,26,0.04) 0%, transparent 70%);
+  }
+  body::after {
+    content: '';
+    position: absolute;
+    bottom: -100px;
+    left: -150px;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(26,26,26,0.03) 0%, transparent 70%);
+  }
+
+  .top-label {
+    font-size: 14px;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    color: #888;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 120px;
+    font-weight: 300;
+    text-align: center;
+    margin-top: 40px;
+    letter-spacing: 24px;
+  }
+
+  .subtitle {
+    font-size: 22px;
+    font-weight: 400;
+    text-align: center;
+    color: #555;
+    margin-top: 16px;
+  }
+
+  .divider {
+    width: 64px;
+    height: 1px;
+    background: #1a1a1a;
+    margin: 48px auto;
+    opacity: 0.3;
+  }
+
+  .tagline {
+    font-size: 28px;
+    font-weight: 400;
+    text-align: center;
+    line-height: 1.8;
+    color: #333;
+  }
+
+  .agent-section {
+    margin-top: 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+
+  .agent-card {
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(26,26,26,0.08);
+    padding: 36px 40px;
+    position: relative;
+  }
+
+  .agent-card .time {
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: #999;
+    text-transform: uppercase;
+  }
+
+  .agent-card .name {
+    font-size: 24px;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+
+  .agent-card .model {
+    font-size: 14px;
+    color: #888;
+    margin-top: 4px;
+  }
+
+  .agent-card .desc {
+    font-size: 16px;
+    color: #555;
+    margin-top: 12px;
+    line-height: 1.7;
+  }
+
+  .flow-arrow {
+    text-align: center;
+    font-size: 20px;
+    color: #bbb;
+    letter-spacing: 8px;
+  }
+
+  .features {
+    margin-top: 56px;
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+  }
+
+  .feature {
+    text-align: center;
+  }
+
+  .feature .number {
+    font-size: 42px;
+    font-weight: 300;
+    color: #1a1a1a;
+  }
+
+  .feature .label {
+    font-size: 14px;
+    color: #888;
+    margin-top: 4px;
+    letter-spacing: 2px;
+  }
+
+  .bottom-section {
+    margin-top: auto;
+    text-align: center;
+  }
+
+  .quote {
+    font-size: 20px;
+    font-weight: 300;
+    color: #666;
+    font-style: italic;
+    margin-bottom: 32px;
+  }
+
+  .awards {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+  }
+
+  .award {
+    font-size: 13px;
+    color: #777;
+    border: 1px solid rgba(26,26,26,0.12);
+    padding: 8px 16px;
+    letter-spacing: 1px;
+  }
+
+  .url {
+    font-size: 16px;
+    color: #999;
+    letter-spacing: 3px;
+  }
+
+  .disclaimer {
+    font-size: 11px;
+    color: #bbb;
+    margin-top: 16px;
+    letter-spacing: 2px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="top-label">Ask My Body</div>
+  <h1 class="title">问身</h1>
+  <p class="subtitle">替你守夜的问身 Agent</p>
+
+  <div class="divider"></div>
+
+  <p class="tagline">
+    睡醒第一件事<br>
+    问问你的身体昨晚过得怎么样
+  </p>
+
+  <div class="agent-section">
+    <div class="agent-card">
+      <div class="time">子时 23:00 — 寅时 05:00</div>
+      <div class="name">Agent 1 · 守夜分析师</div>
+      <div class="model">Claude Sonnet 4.6</div>
+      <div class="desc">
+        你入睡后自动执行两轮夜间巡查。<br>
+        分析 HRV、心率、睡眠数据，写下「夜观笔记」。
+      </div>
+    </div>
+
+    <div class="flow-arrow">— 数据交接 —</div>
+
+    <div class="agent-card">
+      <div class="time">卯时 05:00 — 辰时 09:00</div>
+      <div class="name">Agent 2 · 晨间引导师</div>
+      <div class="model">Claude Opus 4.7</div>
+      <div class="desc">
+        你醒来时已备好报告。<br>
+        融合夜观笔记 + 中医时辰 + 睡眠科学，给出养生建议。
+      </div>
+    </div>
+  </div>
+
+  <div class="features">
+    <div class="feature">
+      <div class="number">2</div>
+      <div class="label">AI Agents</div>
+    </div>
+    <div class="feature">
+      <div class="number">12</div>
+      <div class="label">时辰覆盖</div>
+    </div>
+    <div class="feature">
+      <div class="number">24h</div>
+      <div class="label">黑客松</div>
+    </div>
+  </div>
+
+  <div class="bottom-section">
+    <p class="quote">一个人就是一座庙。</p>
+    <div class="awards">
+      <span class="award">LAIFE Recovery Agent</span>
+      <span class="award">最佳 Agent 效率</span>
+      <span class="award">最健康开发者</span>
+    </div>
+    <p class="url">ask-my-body.vercel.app</p>
+    <p class="disclaimer">非医疗产品 · 不诊断疾病 · 自愿提交健康数据</p>
+  </div>
+
+</body>
+</html>

@@ -47,9 +47,10 @@ iPhone (Apple Watch HRV/RHR)
 
 ## Demo
 
-🌐 **Demo**: [https://ask-my-body.vercel.app](https://ask-my-body.vercel.app) ✅ 已上线
-📋 **海报**: [assets/poster.png](./assets/poster.png)（U9 生成后）
-🎬 **备份 demo 视频**: [assets/backup-demo.mp4](./assets/backup-demo.mp4)（U10 生成后）
+- **Demo**: [https://ask-my-body.vercel.app](https://ask-my-body.vercel.app)
+- **Poster**: [assets/poster.png](./assets/poster.png)
+- **Night Shift Evidence**: [assets/night-shift-log.md](./assets/night-shift-log.md)
+- **Pitch Script**: [assets/pitch-3min.md](./assets/pitch-3min.md)
 
 ---
 
