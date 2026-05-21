@@ -143,7 +143,7 @@ ${yinshiAnalysis ? `【寅时守夜】\n${yinshiAnalysis.content}` : "（寅时�
     model: MODELS.morningGuide,
     system: systemPrompt,
     userMessage,
-    maxTokens: 1400,
+    maxTokens: 2000,
   });
 
   // 防御：如果模型仍然返回了 JSON，自动转为 Markdown 散文
