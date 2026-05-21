@@ -160,17 +160,43 @@ export default function MorningPage() {
             <p className="text-center font-serif text-sm text-red-600">{error}</p>
           )}
 
-          {/* 跳过按钮 */}
+          {/* 解梦 + 跳过 */}
           {step === "idle" && (
-            <p className="text-center text-xs text-ink-400">
-              没有手表数据？{" "}
-              <button
-                onClick={() => { setWatchData(null); setStep("ready"); }}
-                className="underline underline-offset-2 hover:text-ink-600"
-              >
-                跳过，直接生成报告
-              </button>
-            </p>
+            <div className="space-y-4">
+              {/* 解梦入口 */}
+              <div className="space-y-2">
+                <button
+                  onClick={() => setDreamOpen(!dreamOpen)}
+                  className={`flex w-full items-center justify-center gap-2 border px-4 py-2.5 font-serif text-xs transition ${
+                    dreamOpen
+                      ? "border-ink-600 bg-ink-800 text-ink-50"
+                      : "border-ink-200 text-ink-600 hover:border-ink-400"
+                  }`}
+                >
+                  <span>🌙</span>
+                  <span>{dreamOpen ? "收起解梦" : "昨晚做梦了？点这里解梦"}</span>
+                </button>
+                {dreamOpen && (
+                  <textarea
+                    value={dreamText}
+                    onChange={(e) => setDreamText(e.target.value)}
+                    placeholder="描述你的梦境...比如：梦到在一片竹林里迷路了、梦见已故的亲人、梦到考试迟到..."
+                    rows={3}
+                    className="w-full resize-none border border-ink-200 bg-ink-50 px-3 py-2 font-serif text-sm text-ink-800 placeholder:text-ink-400 focus:border-ink-400 focus:outline-none"
+                  />
+                )}
+              </div>
+
+              <p className="text-center text-xs text-ink-400">
+                没有手表数据？{" "}
+                <button
+                  onClick={() => { setWatchData(null); setStep("ready"); }}
+                  className="underline underline-offset-2 hover:text-ink-600"
+                >
+                  跳过，直接生成报告
+                </button>
+              </p>
+            </div>
           )}
         </section>
       )}
