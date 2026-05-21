@@ -1,7 +1,7 @@
 /**
  * Agent 2 — 晨间引导师
- * 在用户早晨打开 App 或 iOS Shortcut 触发时运行
- * 综合夜间分析 + 睡眠数据，生成「今晨问身报告」
+ * 在用户早晨打开 App 或上传手表截图后运行
+ * 综合睡眠分期 + 脉象 + 夜间分析，生成「今晨问身报告」
  */
 
 import { readFileSync } from "fs";
@@ -26,11 +26,31 @@ function loadSystemPrompt(): string {
 }
 
 export interface MorningInput {
-  /** Optional fresh data from iOS Shortcut (overrides stored) */
+  // 基础数据（iOS Shortcut 或手动输入）
   hrv?: number;
   rhr?: number;
   sleep_hours?: number;
+  // 睡眠分期（Apple Watch Vision 提取）
+  sleep_start?: string;
+  sleep_end?: string;
+  deep_sleep_minutes?: number;
+  core_sleep_minutes?: number;
+  rem_sleep_minutes?: number;
+  awake_minutes?: number;
+  // 中医脉象（脉诊 App 数据）
+  pulse_diagnosis?: string;
+  pulse_description?: string;
+  // 控制
   forceRegenerate?: boolean;
+}
+
+/** 分钟 → "X小时Y分" */
+function fmtMinutes(m: number): string {
+  const h = Math.floor(m / 60);
+  const min = m % 60;
+  if (h === 0) return `${min}分钟`;
+  if (min === 0) return `${h}小时`;
+  return `${h}小时${min}分钟`;
 }
 
 export async function runMorningGuide(
@@ -41,21 +61,58 @@ export async function runMorningGuide(
   const h = hourCST();
   const shichen = getShichen(h);
 
-  // Return cached report unless forced to regenerate
+  // 返回缓存报告（除非强制重新生成）
   if (!input.forceRegenerate) {
     const cached = await getMorningReport(today);
     if (cached) return cached;
   }
 
-  // Gather all available data
+  // 读取存储的数据（KV 或内存）
   const sleepEntry = await getSleepEntry(yesterday);
   const zishiAnalysis = await getNightAnalysis(today, "zishi");
   const yinshiAnalysis = await getNightAnalysis(today, "yinshi");
 
-  // Fresh data from Shortcut takes priority
+  // 合并：传入的新数据优先于存储的旧数据
   const hrv = input.hrv ?? sleepEntry?.hrv;
   const rhr = input.rhr ?? sleepEntry?.rhr;
-  const sleep_hours = input.sleep_hours ?? sleepEntry?.sleep_hours;
+  const sleep_hours =
+    input.sleep_hours ??
+    (input.deep_sleep_minutes != null &&
+    input.core_sleep_minutes != null &&
+    input.rem_sleep_minutes != null
+      ? Number(
+          (
+            (input.deep_sleep_minutes +
+              input.core_sleep_minutes +
+              input.rem_sleep_minutes) /
+            60
+          ).toFixed(1)
+        )
+      : sleepEntry?.sleep_hours);
+
+  // 睡眠分期文本
+  const sleepStagesText =
+    input.deep_sleep_minutes != null ||
+    input.core_sleep_minutes != null ||
+    input.rem_sleep_minutes != null
+      ? `
+睡眠分期（Apple Watch）：
+- 深度睡眠: ${input.deep_sleep_minutes != null ? fmtMinutes(input.deep_sleep_minutes) : "未知"} ${input.deep_sleep_minutes != null && input.deep_sleep_minutes < 45 ? "⚠️偏少" : ""}
+- 核心睡眠: ${input.core_sleep_minutes != null ? fmtMinutes(input.core_sleep_minutes) : "未知"}
+- 快速动眼(REM): ${input.rem_sleep_minutes != null ? fmtMinutes(input.rem_sleep_minutes) : "未知"}
+- 清醒时间: ${input.awake_minutes != null ? fmtMinutes(input.awake_minutes) : "未知"} ${input.awake_minutes != null && input.awake_minutes > 45 ? "⚠️睡眠较碎" : ""}
+${input.sleep_start ? `- 入睡: ${input.sleep_start} → 起床: ${input.sleep_end ?? "未知"}` : ""}`
+      : "（无睡眠分期数据）";
+
+  // 脉象文本
+  const pulseText =
+    input.pulse_diagnosis
+      ? `
+中医脉象（脉诊 App）：
+- 脉型: ${input.pulse_diagnosis}
+- 描述: ${input.pulse_description ?? "无"}
+- 意义参考: ${getPulseMeaning(input.pulse_diagnosis)}`
+      : "（无脉象数据）";
 
   const userMessage = `
 今日日期：${today}
@@ -64,11 +121,13 @@ export async function runMorningGuide(
 ${shichen.morningAdvice ? `晨间提示：${shichen.morningAdvice}` : ""}
 主脏器：${shichen.organ}（${shichen.meridian}）
 
-昨夜睡眠数据（${yesterday}）：
-- HRV: ${hrv ?? "未记录"} ms
-- 静息心率: ${rhr ?? "未记录"} bpm
-- 睡眠时长: ${sleep_hours ?? "未记录"} 小时
-- 睡前笔记: ${sleepEntry?.notes ?? "（无记录）"}
+昨夜睡眠概况（${yesterday}）：
+- 总睡眠: ${sleep_hours != null ? `${sleep_hours}小时` : "未记录"}
+- HRV: ${hrv != null ? `${hrv}ms` : "未记录"}
+- 静息心率: ${rhr != null ? `${rhr}bpm` : "未记录"}
+- 睡前笔记: ${sleepEntry?.notes ?? "（无）"}
+${sleepStagesText}
+${pulseText}
 
 夜间守夜笔记：
 ${zishiAnalysis ? `【子时守夜】\n${zishiAnalysis.content}` : "（子时守夜未运行）"}
@@ -84,7 +143,7 @@ ${yinshiAnalysis ? `【寅时守夜】\n${yinshiAnalysis.content}` : "（寅时�
     model: MODELS.morningGuide,
     system: systemPrompt,
     userMessage,
-    maxTokens: 1200,
+    maxTokens: 1400,
   });
 
   const report: MorningReport = {
@@ -96,4 +155,21 @@ ${yinshiAnalysis ? `【寅时守夜】\n${yinshiAnalysis.content}` : "（寅时�
 
   await saveMorningReport(report);
   return report;
+}
+
+/** 常见脉象中医含义速查 */
+function getPulseMeaning(pulse: string): string {
+  const dict: Record<string, string> = {
+    沉脉: "主里证，多见于肾气不足、气血内陷，宜温补",
+    浮脉: "主表证，外感初起，或阴虚阳浮",
+    数脉: "主热证，心率偏快，宜清热",
+    迟脉: "主寒证，阳气不足",
+    弦脉: "主肝郁、痛证、痰饮，压力大时常见",
+    滑脉: "主痰湿、食积，或妊娠",
+    涩脉: "主血虚、气滞血瘀",
+    细脉: "主血虚、阴虚，体力消耗过大",
+    洪脉: "主热盛，气血亢奋",
+    虚脉: "主虚证，气血两虚",
+  };
+  return dict[pulse] ?? "请结合整体状态综合判断";
 }
