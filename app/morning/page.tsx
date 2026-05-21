@@ -190,17 +190,31 @@ export default function MorningPage() {
                   <span>{dreamOpen ? "收起解梦" : "昨晚做梦了？点这里解梦"}</span>
                 </button>
                 {dreamOpen && (
-                  <textarea
-                    value={dreamText}
-                    onChange={(e) => setDreamText(e.target.value)}
-                    placeholder="描述你的梦境...比如：梦到在一片竹林里迷路了、梦见已故的亲人、梦到考试迟到..."
-                    rows={3}
-                    className="w-full resize-none rounded-[3px] border px-3.5 py-3 text-[13px] leading-relaxed text-ink-800 outline-none placeholder:text-ink-400"
-                    style={{
-                      borderColor: "rgba(138,128,120,0.3)",
-                      background: "rgba(250,248,243,0.6)",
-                    }}
-                  />
+                  <>
+                    <textarea
+                      value={dreamText}
+                      onChange={(e) => setDreamText(e.target.value)}
+                      placeholder="描述你的梦境...比如：梦到在一片竹林里迷路了、梦见已故的亲人、梦到考试迟到..."
+                      rows={3}
+                      className="w-full resize-none rounded-[3px] border px-3.5 py-3 text-[13px] leading-relaxed text-ink-800 outline-none placeholder:text-ink-400"
+                      style={{
+                        borderColor: "rgba(138,128,120,0.3)",
+                        background: "rgba(250,248,243,0.6)",
+                      }}
+                    />
+                    <button
+                      onClick={() => { setWatchData(null); handleGenerate(true); }}
+                      disabled={!dreamText.trim()}
+                      className="btn-glow w-full rounded-[3px] border py-3.5 font-kai text-[14px] tracking-super text-ink-800 disabled:opacity-40"
+                      style={{
+                        borderColor: "rgba(184,80,96,0.45)",
+                        background: "linear-gradient(180deg, rgba(245,221,224,0.5), rgba(240,196,200,0.4))",
+                        textIndent: "0.4em",
+                      }}
+                    >
+                      解 梦 · 生 成 报 告
+                    </button>
+                  </>
                 )}
               </div>
             )}
