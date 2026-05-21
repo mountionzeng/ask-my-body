@@ -22,6 +22,8 @@ export default function MorningPage() {
   const [report, setReport] = useState<MorningReport | null>(null);
   const [error, setError] = useState("");
   const [bodyFeeling, setBodyFeeling] = useState("");
+  const [dreamOpen, setDreamOpen] = useState(false);
+  const [dreamText, setDreamText] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 启动时检查今日缓存报告
@@ -67,7 +69,7 @@ export default function MorningPage() {
       const res = await fetch("/api/generate-report", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...watchData, force, body_feeling: bodyFeeling || undefined }),
+        body: JSON.stringify({ ...watchData, force, body_feeling: bodyFeeling || undefined, dream: dreamText || undefined }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? "生成失败");
@@ -252,6 +254,30 @@ export default function MorningPage() {
               rows={2}
               className="w-full resize-none border border-ink-200 bg-ink-50 px-3 py-2 font-serif text-sm text-ink-800 placeholder:text-ink-400 focus:border-ink-400 focus:outline-none"
             />
+          </div>
+
+          {/* 解梦入口 */}
+          <div className="space-y-2">
+            <button
+              onClick={() => setDreamOpen(!dreamOpen)}
+              className={`flex w-full items-center justify-center gap-2 border px-4 py-2.5 font-serif text-xs transition ${
+                dreamOpen
+                  ? "border-ink-600 bg-ink-800 text-ink-50"
+                  : "border-ink-200 text-ink-600 hover:border-ink-400"
+              }`}
+            >
+              <span>🌙</span>
+              <span>{dreamOpen ? "收起解梦" : "昨晚做梦了？点这里解梦"}</span>
+            </button>
+            {dreamOpen && (
+              <textarea
+                value={dreamText}
+                onChange={(e) => setDreamText(e.target.value)}
+                placeholder="描述你的梦境...比如：梦到在一片竹林里迷路了、梦见已故的亲人、梦到考试迟到..."
+                rows={3}
+                className="w-full resize-none border border-ink-200 bg-ink-50 px-3 py-2 font-serif text-sm text-ink-800 placeholder:text-ink-400 focus:border-ink-400 focus:outline-none"
+              />
+            )}
           </div>
 
           {error && (

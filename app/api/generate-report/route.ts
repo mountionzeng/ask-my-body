@@ -12,7 +12,7 @@ import type { WatchData } from "@/app/api/parse-watch/route";
 export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
-  let body: Partial<WatchData> & { force?: boolean; body_feeling?: string } = {};
+  let body: Partial<WatchData> & { force?: boolean; body_feeling?: string; dream?: string } = {};
 
   try {
     body = await req.json();
@@ -34,6 +34,7 @@ export async function POST(req: NextRequest) {
       pulse_diagnosis: body.pulse_diagnosis ?? undefined,
       pulse_description: body.pulse_description ?? undefined,
       body_feeling: body.body_feeling ?? undefined,
+      dream: body.dream ?? undefined,
       forceRegenerate: body.force,
     });
 

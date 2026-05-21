@@ -42,6 +42,7 @@ export interface MorningInput {
   pulse_description?: string;
   // 用户主诉
   body_feeling?: string;
+  dream?: string;
   // 控制
   forceRegenerate?: boolean;
 }
@@ -132,6 +133,8 @@ ${sleepStagesText}
 ${pulseText}
 
 用户晨间自述：${input.body_feeling ?? "（无）"}
+
+用户梦境记录：${input.dream ?? "（无）"}
 
 夜间守夜笔记：
 ${zishiAnalysis ? `【子时守夜】\n${zishiAnalysis.content}` : "（子时守夜未运行）"}
