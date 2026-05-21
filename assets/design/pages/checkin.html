@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>随时求诸己</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 375px;
+    min-height: 812px;
+    font-family: 'Noto Serif SC', serif;
+    background: #faf8f3;
+    color: #2a2520;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    position: relative;
+    background-image:
+      radial-gradient(ellipse at 100% 20%, rgba(168,196,160,0.20), transparent 35%),
+      radial-gradient(ellipse at 0% 110%, rgba(232,160,168,0.22), transparent 40%);
+    overflow: hidden;
+  }
+  body::before {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(45deg, transparent 0 3px, rgba(42,37,32,0.012) 3px 4px),
+      repeating-linear-gradient(-45deg, transparent 0 5px, rgba(42,37,32,0.01) 5px 6px);
+    pointer-events: none; z-index: 1;
+  }
+  .page {
+    position: relative; z-index: 2;
+    padding: 56px 32px 90px;
+    min-height: 812px;
+  }
+  .eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px; letter-spacing: 0.32em; color: #8a8078;
+  }
+  .title {
+    font-size: 44px; font-weight: 300;
+    letter-spacing: 0.14em; line-height: 1.1;
+    margin-top: 14px;
+  }
+  .subtitle {
+    font-size: 13px; font-weight: 300;
+    color: #6a6058; margin-top: 14px;
+    letter-spacing: 0.04em; line-height: 1.8;
+  }
+  .hour-badge {
+    display: flex; align-items: center; gap: 14px;
+    margin-top: 26px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, rgba(245,221,224,0.35), rgba(250,248,243,0.2));
+    border: 1px solid rgba(232,160,168,0.22);
+    border-radius: 4px;
+  }
+  .hour-circle {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #fff5d8 0%, #f5dab0 40%, #c89868 100%);
+    box-shadow: inset -3px -3px 6px rgba(140,90,40,0.2);
+    position: relative; flex-shrink: 0;
+  }
+  .hour-circle::after {
+    content: ""; position: absolute;
+    top: 5px; right: 7px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: rgba(255,250,235,0.6); filter: blur(1.5px);
+  }
+  .hour-name { font-size: 13px; font-weight: 500; letter-spacing: 0.18em; color: #2a2520; }
+  .hour-desc { font-size: 10.5px; color: #8a8078; margin-top: 3px; letter-spacing: 0.04em; }
+  .hour-time { font-family: 'Cormorant Garamond', serif; font-size: 13px; color: #8a8078; letter-spacing: 0.1em; margin-left: auto; }
+
+  .ink-divider {
+    height: 1px; margin: 26px 0 22px;
+    background: linear-gradient(to right,
+      transparent, rgba(42,37,32,0.06) 15%, rgba(42,37,32,0.28) 50%,
+      rgba(42,37,32,0.06) 85%, transparent);
+    position: relative;
+  }
+  .ink-divider::after {
+    content: ""; position: absolute;
+    left: 47%; top: -1.5px; width: 6px; height: 4px;
+    background: radial-gradient(ellipse, rgba(42,37,32,0.35), transparent 70%);
+    border-radius: 50%;
+  }
+
+  .section { margin-top: 22px; }
+  .section:first-of-type { margin-top: 0; }
+  .section-label {
+    font-size: 12px; color: #4a4238;
+    letter-spacing: 0.24em; font-weight: 500;
+    margin-bottom: 14px;
+    display: flex; align-items: center;
+  }
+  .section-label::before {
+    content: ""; display: inline-block;
+    width: 3px; height: 12px;
+    background: linear-gradient(180deg, #e8a0a8, #c08088);
+    margin-right: 10px;
+  }
+  .section-label .cn-num {
+    font-family: 'Cormorant Garamond', serif;
+    color: #b8aea4; margin-left: auto;
+    font-size: 11px; letter-spacing: 0.1em;
+  }
+
+  .tags {
+    display: flex; flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tag {
+    padding: 8px 13px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 12px; font-weight: 400;
+    color: #4a4238;
+    background: rgba(250,248,243,0.6);
+    border: 1px solid rgba(138,128,120,0.35);
+    border-radius: 22px;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    transition: all .25s;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+  .tag .emo { margin-right: 3px; font-size: 13px; }
+  .tag:hover { border-color: rgba(232,160,168,0.6); }
+  .tag.selected {
+    background: linear-gradient(180deg, #f5dde0, #f0c4c8);
+    border-color: rgba(184,80,96,0.45);
+    color: #4a2528;
+    box-shadow: 0 1px 0 rgba(232,160,168,0.3);
+  }
+  .tag.signal { color: #4a4238; }
+  .tag.signal.selected {
+    background: linear-gradient(180deg, rgba(168,196,160,0.5), rgba(140,176,130,0.45));
+    border-color: rgba(110,138,102,0.55);
+    color: #2a3528;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 14px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 13px; line-height: 1.8;
+    color: #2a2520;
+    background: rgba(250,248,243,0.6);
+    border: 1px solid rgba(138,128,120,0.3);
+    border-radius: 3px;
+    resize: none; outline: none;
+  }
+  textarea::placeholder { color: #b8aea4; }
+  textarea:focus { border-color: rgba(232,160,168,0.6); }
+
+  .btn {
+    display: block; width: 100%;
+    padding: 16px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 14px; letter-spacing: 0.5em;
+    text-indent: 0.5em;
+    text-align: center;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 26px;
+    border: 1px solid rgba(42,37,32,0.55);
+    background: rgba(250,248,243,0.4);
+    color: #2a2520;
+    position: relative; overflow: hidden;
+  }
+  .btn::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(232,160,168,0.22), transparent 70%);
+    opacity: 0; transition: opacity .4s;
+  }
+  .btn:hover::before { opacity: 1; }
+
+  .nav {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 18px 32px;
+    display: flex; justify-content: space-between;
+    font-size: 11px; color: #8a8078;
+    letter-spacing: 0.15em;
+    border-top: 1px solid rgba(213,207,200,0.5);
+    background: rgba(250,248,243,0.7);
+    backdrop-filter: blur(4px);
+  }
+  .nav a { color: #6a6058; text-decoration: none; padding: 4px 0; }
+  .nav a.active { color: #2a2520; border-bottom: 1px solid #2a2520; }
+
+  .bamboo-r {
+    position: absolute;
+    top: 110px; right: -30px;
+    width: 100px; height: 220px;
+    z-index: 1; opacity: 0.5;
+    pointer-events: none;
+  }
+  .wash-pink-b {
+    position: absolute;
+    bottom: -30px; left: -40px; right: -40px;
+    height: 180px;
+    background: radial-gradient(ellipse at 30% 100%, rgba(232,160,168,0.28), transparent 60%);
+    z-index: 1; pointer-events: none;
+    filter: blur(2px);
+  }
+
+  /* count chip */
+  .count {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 10px; letter-spacing: 0.1em;
+    color: #b8aea4;
+  }
+</style>
+</head>
+<body>
+  <div class="bamboo-r">
+    <svg viewBox="0 0 100 220" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 40 0 Q 45 80 35 220" stroke="#8aa482" stroke-width="1.2" fill="none" opacity="0.6"/>
+      <path d="M 70 -5 Q 78 100 65 220" stroke="#a8c4a0" stroke-width="1.4" fill="none" opacity="0.5"/>
+      <line x1="33" y1="50" x2="48" y2="48" stroke="#6e8a66" stroke-width="0.5" opacity="0.5"/>
+      <line x1="32" y1="110" x2="46" y2="108" stroke="#6e8a66" stroke-width="0.5" opacity="0.5"/>
+      <line x1="65" y1="60" x2="80" y2="58" stroke="#6e8a66" stroke-width="0.5" opacity="0.5"/>
+      <line x1="64" y1="130" x2="79" y2="128" stroke="#6e8a66" stroke-width="0.5" opacity="0.5"/>
+      <g fill="#a8c4a0" opacity="0.7">
+        <ellipse cx="55" cy="25" rx="22" ry="3" transform="rotate(-30 55 25)"/>
+        <ellipse cx="20" cy="42" rx="16" ry="2.5" transform="rotate(40 20 42)"/>
+        <ellipse cx="80" cy="70" rx="18" ry="2.8" transform="rotate(-25 80 70)"/>
+        <ellipse cx="22" cy="92" rx="14" ry="2.2" transform="rotate(48 22 92)"/>
+        <ellipse cx="78" cy="140" rx="20" ry="2.8" transform="rotate(-30 78 140)"/>
+        <ellipse cx="30" cy="170" rx="16" ry="2.4" transform="rotate(38 30 170)"/>
+      </g>
+      <g fill="#8aa482" opacity="0.5">
+        <ellipse cx="70" cy="30" rx="14" ry="2" transform="rotate(-55 70 30)"/>
+        <ellipse cx="40" cy="125" rx="12" ry="2" transform="rotate(-55 40 125)"/>
+      </g>
+    </svg>
+  </div>
+  <div class="wash-pink-b"></div>
+
+  <div class="page">
+    <div class="eyebrow">ASK MY BODY</div>
+    <h1 class="title">求 诸 己</h1>
+    <p class="subtitle">此刻，你的身体想说什么？</p>
+
+    <div class="hour-badge">
+      <div class="hour-circle"></div>
+      <div>
+        <div class="hour-name">未时 · 小肠</div>
+        <div class="hour-desc">十三至十五时 · 宜分清浊、缓饮水</div>
+      </div>
+      <div class="hour-time">14:08</div>
+    </div>
+
+    <div class="ink-divider"></div>
+
+    <div class="section">
+      <div class="section-label">心 情 <span class="cn-num">i.</span></div>
+      <div class="tags">
+        <div class="tag selected"><span class="emo">😌</span>平静</div>
+        <div class="tag"><span class="emo">😊</span>愉悦</div>
+        <div class="tag selected"><span class="emo">😔</span>疲惫</div>
+        <div class="tag"><span class="emo">😠</span>烦躁</div>
+        <div class="tag"><span class="emo">😰</span>焦虑</div>
+        <div class="tag"><span class="emo">😢</span>低落</div>
+        <div class="tag"><span class="emo">🤔</span>迷糊</div>
+        <div class="tag"><span class="emo">💪</span>精力充沛</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">身 体 信 号 <span class="cn-num">ii.</span></div>
+      <div class="tags">
+        <div class="tag signal">头疼</div>
+        <div class="tag signal selected">肩颈酸</div>
+        <div class="tag signal">腰酸</div>
+        <div class="tag signal">胃胀</div>
+        <div class="tag signal">喉咙干</div>
+        <div class="tag signal selected">眼睛累</div>
+        <div class="tag signal">手脚凉</div>
+        <div class="tag signal">出汗多</div>
+        <div class="tag signal">失眠</div>
+        <div class="tag signal">多梦</div>
+        <div class="tag signal">食欲差</div>
+        <div class="tag signal">便秘</div>
+        <div class="tag signal">上火</div>
+        <div class="tag signal">怕冷</div>
+        <div class="tag signal">皮肤痒</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">还 有 什 么 想 说 的 <span class="cn-num">iii.</span></div>
+      <textarea placeholder="开会开了一下午，眼睛胀，想喝杯热的……"></textarea>
+    </div>
+
+    <button class="btn">求 诸 己</button>
+  </div>
+
+  <nav class="nav">
+    <a href="morning.html">晨起报告</a>
+    <a href="journal.html">身体日志</a>
+    <a href="home.html">首页</a>
+  </nav>
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>身体日志</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 375px;
+    min-height: 812px;
+    font-family: 'Noto Serif SC', serif;
+    background: #faf8f3;
+    color: #2a2520;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    position: relative;
+    background-image:
+      radial-gradient(ellipse at 110% 100%, rgba(232,160,168,0.18), transparent 35%),
+      radial-gradient(ellipse at 0% 5%, rgba(168,196,160,0.20), transparent 40%);
+    overflow: hidden;
+  }
+  body::before {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(45deg, transparent 0 3px, rgba(42,37,32,0.012) 3px 4px),
+      repeating-linear-gradient(-45deg, transparent 0 5px, rgba(42,37,32,0.01) 5px 6px);
+    pointer-events: none; z-index: 1;
+  }
+  .page {
+    position: relative; z-index: 2;
+    padding: 56px 32px 90px;
+    min-height: 812px;
+  }
+  .eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px; letter-spacing: 0.32em; color: #8a8078;
+  }
+  .title {
+    font-size: 40px; font-weight: 300;
+    letter-spacing: 0.18em; line-height: 1.1;
+    margin-top: 14px;
+  }
+  .subtitle {
+    font-size: 13px; font-weight: 300;
+    color: #6a6058; margin-top: 14px;
+    letter-spacing: 0.05em; line-height: 1.8;
+  }
+  .subtitle .count-cn {
+    font-family: 'Cormorant Garamond', serif;
+    color: #b85060; margin: 0 4px; font-style: italic;
+  }
+
+  .ink-divider {
+    height: 1px; margin: 26px 0;
+    background: linear-gradient(to right,
+      transparent, rgba(42,37,32,0.06) 15%, rgba(42,37,32,0.28) 50%,
+      rgba(42,37,32,0.06) 85%, transparent);
+    position: relative;
+  }
+  .ink-divider::after {
+    content: ""; position: absolute;
+    left: 47%; top: -1.5px; width: 6px; height: 4px;
+    background: radial-gradient(ellipse, rgba(42,37,32,0.35), transparent 70%);
+    border-radius: 50%;
+  }
+
+  .trends {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+  }
+  .trend {
+    padding: 6px 8px;
+    position: relative;
+  }
+  .trend + .trend::before {
+    content: ""; position: absolute; left: 0; top: 10%;
+    width: 1px; height: 80%;
+    background: linear-gradient(180deg, transparent, rgba(138,128,120,0.3), transparent);
+  }
+  .trend-label {
+    font-size: 11px; color: #8a8078;
+    letter-spacing: 0.2em;
+    margin-bottom: 6px;
+  }
+  .trend-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 400;
+    color: #2a2520;
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  .trend-unit {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 11px; color: #8a8078;
+    margin-left: 2px;
+    font-weight: 300;
+  }
+  .trend-delta {
+    margin-top: 8px;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .trend-delta .arrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px; line-height: 1;
+  }
+  .delta-up { color: #6e8a66; }
+  .delta-flat { color: #8a8078; }
+  .delta-down { color: #c48050; }
+
+  /* tiny sparkline */
+  .spark {
+    margin-top: 8px;
+    height: 18px; width: 100%;
+    opacity: 0.85;
+  }
+
+  .list-label {
+    font-size: 12px; color: #4a4238;
+    letter-spacing: 0.24em; font-weight: 500;
+    display: flex; align-items: baseline;
+    margin-bottom: 14px;
+  }
+  .list-label::before {
+    content: ""; display: inline-block;
+    width: 3px; height: 12px;
+    background: linear-gradient(180deg, #e8a0a8, #c08088);
+    margin-right: 10px;
+    transform: translateY(2px);
+  }
+  .list-label .meta {
+    margin-left: auto;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px; color: #b8aea4;
+    letter-spacing: 0.08em;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  .entry {
+    position: relative;
+    padding: 16px 16px 16px 22px;
+    background: linear-gradient(180deg, rgba(247,243,235,0.6), rgba(244,238,228,0.45));
+    border-radius: 3px;
+    margin-bottom: 14px;
+  }
+  .entry::before {
+    content: "";
+    position: absolute;
+    left: 6px; top: 14px; bottom: 14px;
+    width: 2px;
+    background: linear-gradient(180deg, rgba(232,160,168,0.15), rgba(232,160,168,0.65) 30%, rgba(232,160,168,0.6) 70%, rgba(232,160,168,0.1));
+    border-radius: 1px;
+  }
+  .entry-head {
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  .entry-date {
+    font-size: 14px; font-weight: 500;
+    color: #2a2520; letter-spacing: 0.08em;
+  }
+  .entry-day {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px; color: #8a8078;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .entry-tod {
+    margin-left: auto;
+    font-size: 11px; color: #8a8078;
+    letter-spacing: 0.1em;
+  }
+  .entry-stats {
+    font-size: 11px; color: #8a8078;
+    margin-top: 6px;
+    letter-spacing: 0.08em;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+  }
+  .entry-stats .sep { color: #d5cfc8; margin: 0 6px; }
+  .entry-quote {
+    font-size: 12.5px;
+    color: #4a4238;
+    margin-top: 10px;
+    line-height: 1.8;
+    letter-spacing: 0.03em;
+    font-style: italic;
+  }
+  .entry-quote::before { content: "「"; color: #b8aea4; }
+  .entry-quote::after { content: "」"; color: #b8aea4; }
+  .entry-foot {
+    margin-top: 10px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 11px;
+  }
+  .entry-tags {
+    display: flex; gap: 6px;
+    flex-wrap: wrap;
+  }
+  .mini-tag {
+    padding: 2px 8px;
+    background: rgba(245,221,224,0.5);
+    color: #6b3a40;
+    border-radius: 10px;
+    font-size: 10.5px;
+    letter-spacing: 0.05em;
+  }
+  .mini-tag.green {
+    background: rgba(168,196,160,0.35);
+    color: #3a4a32;
+  }
+  .expand {
+    color: #8a8078;
+    letter-spacing: 0.1em;
+    font-size: 10.5px;
+    cursor: pointer;
+  }
+  .expand::after { content: " ›"; }
+
+  .nav {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 18px 32px;
+    display: flex; justify-content: space-between;
+    font-size: 11px; color: #8a8078;
+    letter-spacing: 0.15em;
+    border-top: 1px solid rgba(213,207,200,0.5);
+    background: rgba(250,248,243,0.7);
+    backdrop-filter: blur(4px);
+  }
+  .nav a { color: #6a6058; text-decoration: none; padding: 4px 0; }
+  .nav a.active { color: #2a2520; border-bottom: 1px solid #2a2520; }
+
+  .ink-cloud {
+    position: absolute;
+    top: -30px; left: -30px;
+    width: 200px; height: 140px;
+    z-index: 1; opacity: 0.7;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+  <div class="ink-cloud">
+    <svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="cloud1" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#2a2520" stop-opacity="0.25"/>
+          <stop offset="60%" stop-color="#6a6058" stop-opacity="0.08"/>
+          <stop offset="100%" stop-color="#6a6058" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="cloud2" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#168,196,160" stop-opacity="0.18"/>
+          <stop offset="100%" stop-color="#a8c4a0" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <ellipse cx="80" cy="55" rx="80" ry="35" fill="url(#cloud1)"/>
+      <ellipse cx="140" cy="80" rx="50" ry="22" fill="url(#cloud1)" opacity="0.6"/>
+      <ellipse cx="50" cy="90" rx="40" ry="18" fill="url(#cloud1)" opacity="0.45"/>
+    </svg>
+  </div>
+
+  <div class="page">
+    <div class="eyebrow">ASK MY BODY</div>
+    <h1 class="title">身 体<br>日 志</h1>
+    <p class="subtitle">近<span class="count-cn">柒</span>日的求诸己记录 · 已记录 <span class="count-cn">叁</span> 天</p>
+
+    <div class="ink-divider"></div>
+
+    <div class="trends">
+      <div class="trend">
+        <div class="trend-label">HRV</div>
+        <div class="trend-value">52<span class="trend-unit">ms</span></div>
+        <div class="trend-delta delta-up">
+          <span class="arrow">↑</span>3 · 变好
+        </div>
+        <svg class="spark" viewBox="0 0 80 18" preserveAspectRatio="none">
+          <polyline points="0,12 12,10 24,11 36,8 48,9 60,6 72,5 80,4"
+                    stroke="#6e8a66" stroke-width="1" fill="none" opacity="0.7" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="trend">
+        <div class="trend-label">心率</div>
+        <div class="trend-value">58<span class="trend-unit">bpm</span></div>
+        <div class="trend-delta delta-flat">
+          <span class="arrow">→</span>0 · 持平
+        </div>
+        <svg class="spark" viewBox="0 0 80 18" preserveAspectRatio="none">
+          <polyline points="0,9 12,10 24,8 36,9 48,9 60,10 72,9 80,9"
+                    stroke="#8a8078" stroke-width="1" fill="none" opacity="0.7" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="trend">
+        <div class="trend-label">睡眠</div>
+        <div class="trend-value">7.2<span class="trend-unit">h</span></div>
+        <div class="trend-delta delta-down">
+          <span class="arrow">↓</span>0.5 · 注意
+        </div>
+        <svg class="spark" viewBox="0 0 80 18" preserveAspectRatio="none">
+          <polyline points="0,5 12,6 24,4 36,7 48,8 60,11 72,12 80,13"
+                    stroke="#c48050" stroke-width="1" fill="none" opacity="0.75" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="ink-divider"></div>
+
+    <div class="list-label">
+      最 近 记 录
+      <span class="meta">May · 廿一</span>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <span class="entry-date">五月廿一</span>
+        <span class="entry-day">WED</span>
+        <span class="entry-tod">晨起</span>
+      </div>
+      <div class="entry-stats">
+        睡 7.2h <span class="sep">·</span> HRV 52ms <span class="sep">·</span> HR 58bpm
+      </div>
+      <div class="entry-quote">做了个长梦，醒来肩膀有点紧，但精神还可以。</div>
+      <div class="entry-foot">
+        <div class="entry-tags">
+          <span class="mini-tag">肩颈酸</span>
+          <span class="mini-tag green">精力尚足</span>
+        </div>
+        <span class="expand">展开</span>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <span class="entry-date">五月二十</span>
+        <span class="entry-day">TUE</span>
+        <span class="entry-tod">午后</span>
+      </div>
+      <div class="entry-stats">
+        睡 6.8h <span class="sep">·</span> HRV 49ms <span class="sep">·</span> HR 62bpm
+      </div>
+      <div class="entry-quote">下午眼睛涨，喝了热水后好一些。</div>
+      <div class="entry-foot">
+        <div class="entry-tags">
+          <span class="mini-tag">眼睛累</span>
+          <span class="mini-tag">疲惫</span>
+        </div>
+        <span class="expand">展开</span>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <span class="entry-date">五月十九</span>
+        <span class="entry-day">MON</span>
+        <span class="entry-tod">睡前</span>
+      </div>
+      <div class="entry-stats">
+        睡 7.5h <span class="sep">·</span> HRV 54ms <span class="sep">·</span> HR 56bpm
+      </div>
+      <div class="entry-quote">今天走得多，腿有点酸，整体很安。</div>
+      <div class="entry-foot">
+        <div class="entry-tags">
+          <span class="mini-tag green">平静</span>
+        </div>
+        <span class="expand">展开</span>
+      </div>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <a href="morning.html">今晨报告</a>
+    <a href="sleep.html">睡前记录</a>
+    <a href="home.html">首页</a>
+  </nav>
+</body>
+</html>

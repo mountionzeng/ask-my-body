@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>首页 · 求诸己</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 375px;
+    min-height: 812px;
+    font-family: 'Noto Serif SC', serif;
+    background: #faf8f3;
+    color: #2a2520;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Rice paper texture */
+  body {
+    position: relative;
+    background-color: #faf8f3;
+    background-image:
+      radial-gradient(ellipse at 15% 110%, rgba(232,160,168,0.18), transparent 45%),
+      radial-gradient(ellipse at 90% 8%, rgba(168,196,160,0.14), transparent 40%),
+      radial-gradient(ellipse at 50% 50%, rgba(245,221,224,0.08), transparent 60%);
+    overflow: hidden;
+  }
+  body::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(45deg, transparent 0 3px, rgba(42,37,32,0.012) 3px 4px),
+      repeating-linear-gradient(-45deg, transparent 0 5px, rgba(42,37,32,0.01) 5px 6px);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .page {
+    position: relative;
+    z-index: 2;
+    padding: 56px 32px 28px;
+    min-height: 812px;
+    display: flex;
+    flex-direction: column;
+  }
+  .eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    color: #8a8078;
+    font-weight: 400;
+  }
+  .title {
+    font-size: 56px;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    line-height: 1.05;
+    color: #2a2520;
+    margin-top: 14px;
+  }
+  .subtitle {
+    font-size: 13px;
+    font-weight: 300;
+    color: #6a6058;
+    margin-top: 18px;
+    letter-spacing: 0.04em;
+    line-height: 1.7;
+  }
+  /* Ink divider — dense in middle, fades at edges */
+  .ink-divider {
+    height: 1px;
+    margin: 28px 0;
+    background: linear-gradient(to right,
+      transparent 0%,
+      rgba(42,37,32,0.05) 15%,
+      rgba(42,37,32,0.28) 50%,
+      rgba(42,37,32,0.05) 85%,
+      transparent 100%);
+    position: relative;
+  }
+  .ink-divider::after {
+    content: "";
+    position: absolute;
+    left: 47%; top: -1.5px;
+    width: 6px; height: 4px;
+    background: radial-gradient(ellipse at center, rgba(42,37,32,0.35), transparent 70%);
+    border-radius: 50%;
+  }
+  /* Buttons */
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 16px 20px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 15px;
+    letter-spacing: 0.32em;
+    text-align: center;
+    text-indent: 0.32em;
+    border-radius: 3px;
+    cursor: pointer;
+    background: transparent;
+    transition: all .35s ease;
+  }
+  .btn-primary {
+    border: 1px solid rgba(42,37,32,0.55);
+    color: #2a2520;
+    background: rgba(250,248,243,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(232,160,168,0.18), transparent 70%);
+    opacity: 0; transition: opacity .4s;
+  }
+  .btn-primary:hover::before { opacity: 1; }
+  .btn-secondary {
+    border: 1px solid rgba(232,160,168,0.5);
+    background: linear-gradient(180deg, #f5dde0 0%, #f0c4c8 100%);
+    color: #6b3a40;
+    margin-top: 14px;
+  }
+  .btn-secondary:hover {
+    background: linear-gradient(180deg, #f0c4c8 0%, #e8a0a8 100%);
+    color: #4a2528;
+  }
+  /* bottom links */
+  .links {
+    margin-top: 26px;
+    text-align: center;
+    font-size: 12px;
+    color: #8a8078;
+    letter-spacing: 0.12em;
+  }
+  .links a {
+    color: #6a6058;
+    text-decoration: none;
+    border-bottom: 1px dotted rgba(138,128,120,0.4);
+    padding-bottom: 2px;
+  }
+  .links .sep {
+    margin: 0 14px;
+    color: #c5beb6;
+  }
+  .footer {
+    margin-top: auto;
+    padding-top: 36px;
+    text-align: center;
+    font-size: 10px;
+    color: #a89e95;
+    letter-spacing: 0.18em;
+    line-height: 1.9;
+  }
+  .footer .dot { color: #d5cfc8; margin: 0 8px; }
+
+  /* Decorative: bamboo top-right (SVG inline) */
+  .bamboo {
+    position: absolute;
+    top: 28px; right: -10px;
+    width: 110px; height: 160px;
+    opacity: 0.6;
+    z-index: 1;
+    pointer-events: none;
+  }
+  /* Decorative: pink ink wash bottom-left */
+  .wash-pink {
+    position: absolute;
+    bottom: -40px; left: -60px;
+    width: 220px; height: 220px;
+    background: radial-gradient(circle at 40% 60%, rgba(232,160,168,0.35) 0%, rgba(245,221,224,0.18) 35%, transparent 65%);
+    border-radius: 50%;
+    z-index: 1;
+    pointer-events: none;
+    filter: blur(2px);
+  }
+  /* small seal stamp */
+  .seal {
+    position: absolute;
+    bottom: 92px; right: 28px;
+    width: 28px; height: 28px;
+    border: 1px solid rgba(180,60,60,0.55);
+    color: rgba(180,60,60,0.7);
+    font-size: 10px;
+    line-height: 26px;
+    text-align: center;
+    letter-spacing: 0;
+    font-family: 'Noto Serif SC', serif;
+    background: rgba(180,60,60,0.03);
+    transform: rotate(-2deg);
+    z-index: 2;
+  }
+  /* Time / season chip on home */
+  .season {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 22px;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: #8a8078;
+  }
+  .season-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #e8a0a8, #b86068);
+  }
+
+  .button-stack { margin-top: 8px; }
+</style>
+</head>
+<body>
+  <div class="bamboo">
+    <svg viewBox="0 0 110 160" xmlns="http://www.w3.org/2000/svg">
+      <!-- stalks -->
+      <path d="M 35 5 Q 38 60 30 155" stroke="#8aa482" stroke-width="1.2" fill="none" opacity="0.65"/>
+      <path d="M 60 0 Q 65 70 58 158" stroke="#a8c4a0" stroke-width="1.5" fill="none" opacity="0.55"/>
+      <!-- nodes -->
+      <line x1="32" y1="40" x2="42" y2="38" stroke="#6e8a66" stroke-width="0.6" opacity="0.6"/>
+      <line x1="31" y1="80" x2="41" y2="78" stroke="#6e8a66" stroke-width="0.6" opacity="0.6"/>
+      <line x1="60" y1="55" x2="71" y2="53" stroke="#6e8a66" stroke-width="0.6" opacity="0.6"/>
+      <line x1="59" y1="100" x2="70" y2="98" stroke="#6e8a66" stroke-width="0.6" opacity="0.6"/>
+      <!-- leaves: simple long ellipses rotated -->
+      <g fill="#a8c4a0" opacity="0.72">
+        <ellipse cx="50" cy="22" rx="22" ry="3" transform="rotate(-28 50 22)"/>
+        <ellipse cx="22" cy="32" rx="18" ry="2.6" transform="rotate(38 22 32)"/>
+        <ellipse cx="78" cy="45" rx="20" ry="3" transform="rotate(-22 78 45)"/>
+        <ellipse cx="20" cy="68" rx="16" ry="2.4" transform="rotate(42 20 68)"/>
+        <ellipse cx="80" cy="82" rx="22" ry="3" transform="rotate(-32 80 82)"/>
+        <ellipse cx="48" cy="118" rx="18" ry="2.6" transform="rotate(35 48 118)"/>
+      </g>
+      <g fill="#8aa482" opacity="0.5">
+        <ellipse cx="70" cy="20" rx="14" ry="2" transform="rotate(-50 70 20)"/>
+        <ellipse cx="35" cy="92" rx="13" ry="2" transform="rotate(-58 35 92)"/>
+        <ellipse cx="72" cy="130" rx="15" ry="2.2" transform="rotate(-28 72 130)"/>
+      </g>
+    </svg>
+  </div>
+  <div class="wash-pink"></div>
+
+  <div class="page">
+    <div class="eyebrow">ASK MY BODY</div>
+    <h1 class="title">求<br>诸己</h1>
+    <p class="subtitle">身体会知道答案。<br>静下来，听她说。</p>
+
+    <div class="season">
+      <span class="season-dot"></span>
+      <span>春末 · 立夏前三日</span>
+    </div>
+
+    <div class="ink-divider"></div>
+
+    <div class="button-stack">
+      <button class="btn btn-primary">晨 起 求 诸 己</button>
+      <button class="btn btn-secondary">随 时 求 诸 己</button>
+    </div>
+
+    <div class="links">
+      <a href="sleep.html">睡前记录</a>
+      <span class="sep">·</span>
+      <a href="journal.html">身体日志</a>
+    </div>
+
+    <div class="seal">己</div>
+
+    <div class="footer">
+      非医疗产品 <span class="dot">·</span> 不诊断疾病<br>
+      自愿提交健康数据
+    </div>
+  </div>
+</body>
+</html>

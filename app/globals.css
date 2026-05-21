@@ -2,34 +2,84 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap");
 
 :root {
-  --bg: #fafaf9;
-  --fg: #1c1917;
-  --muted: #a8a29e;
-  --hairline: #e7e5e4;
+  --bg: #faf8f3;
+  --fg: #2a2520;
 }
 
-html,
-body {
+html, body {
   background: var(--bg);
   color: var(--fg);
-  font-feature-settings: "ss01", "cv11";
 }
 
 body {
-  font-family: "Inter", "Noto Serif SC", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Noto Serif SC", ui-serif, Georgia, serif;
   -webkit-font-smoothing: antialiased;
+  position: relative;
 }
 
+/* Rice paper texture overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(45deg, transparent 0 3px, rgba(42,37,32,0.012) 3px 4px),
+    repeating-linear-gradient(-45deg, transparent 0 5px, rgba(42,37,32,0.01) 5px 6px);
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* Ink divider — dense in middle, fades at edges */
 .ink-divider {
   height: 1px;
-  background: linear-gradient(
-    to right,
-    transparent,
-    var(--hairline) 20%,
-    var(--hairline) 80%,
-    transparent
-  );
+  margin: 28px 0;
+  background: linear-gradient(to right,
+    transparent 0%,
+    rgba(42,37,32,0.06) 15%,
+    rgba(42,37,32,0.28) 50%,
+    rgba(42,37,32,0.06) 85%,
+    transparent 100%);
+  position: relative;
+}
+
+.ink-divider::after {
+  content: "";
+  position: absolute;
+  left: 47%;
+  top: -1.5px;
+  width: 6px;
+  height: 4px;
+  background: radial-gradient(ellipse at center, rgba(42,37,32,0.35), transparent 70%);
+  border-radius: 50%;
+}
+
+/* Field label with plum accent bar */
+.field-label::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 12px;
+  background: linear-gradient(180deg, #e8a0a8, #c08088);
+  margin-right: 8px;
+  vertical-align: -1px;
+}
+
+/* Button hover glow */
+.btn-glow {
+  position: relative;
+  overflow: hidden;
+}
+.btn-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(232,160,168,0.22), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.btn-glow:hover::before {
+  opacity: 1;
 }

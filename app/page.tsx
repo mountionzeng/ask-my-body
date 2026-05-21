@@ -1,63 +1,96 @@
 import Link from "next/link";
+import { BambooDecoration, WashBlob, SealStamp, BottomNav } from "@/components/decorations";
 
 export default function Home() {
   return (
-    <div className="space-y-16 py-12">
-      <header className="space-y-6 text-center">
-        <p className="text-xs uppercase tracking-widest text-ink-400">
-          Ask My Body
-        </p>
-        <h1 className="font-serif text-5xl font-light leading-tight text-ink-900">
-          求诸己
+    <div className="relative flex min-h-[calc(100vh-56px)] flex-col">
+      {/* Decorations */}
+      <BambooDecoration className="right-[-10px] top-7 h-40 w-28" />
+      <WashBlob color="pink" className="bottom-[-40px] left-[-60px] h-56 w-56" />
+
+      {/* Background washes */}
+      <div
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          backgroundImage:
+            "radial-gradient(ellipse at 15% 110%, rgba(232,160,168,0.18), transparent 45%), radial-gradient(ellipse at 90% 8%, rgba(168,196,160,0.14), transparent 40%)",
+        }}
+      />
+
+      {/* Content */}
+      <div className="relative z-10 flex flex-1 flex-col">
+        <p className="font-display text-[11px] tracking-super text-ink-400">ASK MY BODY</p>
+        <h1 className="mt-3.5 text-[56px] font-light leading-[1.05] tracking-wider text-ink-800">
+          求<br />诸己
         </h1>
-        <p className="font-serif text-base text-ink-600">
-          身体会知道答案。
-        </p>
-      </header>
-
-      <div className="ink-divider" />
-
-      <section className="space-y-6 text-center">
-        <p className="font-serif text-base leading-relaxed text-ink-800">
-          睡醒第一件事——
-          <br />
-          问问你的身体昨晚过得怎么样。
+        <p className="mt-4 text-[13px] font-light leading-relaxed tracking-wide text-ink-500">
+          身体会知道答案。<br />静下来，听她说。
         </p>
 
-        <Link
-          href="/morning"
-          className="inline-flex items-center justify-center rounded-none border border-ink-800 px-8 py-3 font-serif text-sm tracking-widest text-ink-900 transition hover:bg-ink-800 hover:text-ink-50"
-        >
-          晨起求诸己
-        </Link>
+        {/* Season chip */}
+        <div className="mt-5 flex items-center gap-2 text-[11px] tracking-super text-ink-400">
+          <span
+            className="h-1.5 w-1.5 rounded-full"
+            style={{ background: "radial-gradient(circle at 30% 30%, #e8a0a8, #b86068)" }}
+          />
+          <span>小满 · 夏之始</span>
+        </div>
 
-        <p className="pt-6 text-xs text-ink-400">
-          它不替你做决定 — 它只是替你守夜，让你醒来时，答案已在身边。
-        </p>
+        <div className="ink-divider" />
 
-        <Link
-          href="/checkin"
-          className="inline-flex items-center justify-center rounded-none border border-ink-400 px-6 py-2 font-serif text-xs tracking-widest text-ink-600 transition hover:border-ink-800 hover:text-ink-900"
-        >
-          随时求诸己
-        </Link>
+        <div className="space-y-3.5">
+          <Link
+            href="/morning"
+            className="btn-glow block w-full rounded-[3px] border py-4 text-center text-[15px] tracking-super text-ink-800"
+            style={{
+              borderColor: "rgba(42,37,32,0.55)",
+              background: "rgba(250,248,243,0.4)",
+              textIndent: "0.32em",
+            }}
+          >
+            晨 起 求 诸 己
+          </Link>
+          <Link
+            href="/checkin"
+            className="block w-full rounded-[3px] border py-4 text-center text-[15px] tracking-super"
+            style={{
+              borderColor: "rgba(232,160,168,0.5)",
+              background: "linear-gradient(180deg, #f5dde0 0%, #f0c4c8 100%)",
+              color: "#6b3a40",
+              textIndent: "0.32em",
+            }}
+          >
+            随 时 求 诸 己
+          </Link>
+        </div>
 
-        <div className="flex items-center justify-center gap-6 pt-2">
-          <Link href="/sleep" className="text-xs text-ink-400 underline-offset-4 hover:text-ink-600 hover:underline">
+        <div className="mt-6 flex items-center justify-center gap-3.5 text-[12px] tracking-wider text-ink-400">
+          <Link
+            href="/sleep"
+            className="border-b border-dotted border-ink-300/40 pb-0.5 text-ink-500 hover:text-ink-800"
+          >
             睡前记录
           </Link>
-          <span className="text-ink-200">·</span>
-          <Link href="/journal" className="text-xs text-ink-400 underline-offset-4 hover:text-ink-600 hover:underline">
+          <span className="text-ink-300">·</span>
+          <Link
+            href="/journal"
+            className="border-b border-dotted border-ink-300/40 pb-0.5 text-ink-500 hover:text-ink-800"
+          >
             身体日志
           </Link>
         </div>
-      </section>
 
-      <div className="ink-divider" />
+        {/* Seal stamp */}
+        <SealStamp className="absolute bottom-24 right-0" />
 
-      <footer className="text-center text-xs text-ink-400">
-        非医疗产品 · 不诊断疾病 · 自愿提交健康数据
-      </footer>
+        {/* Footer */}
+        <div className="mt-auto pt-9 text-center text-[10px] leading-loose tracking-widest text-ink-400">
+          非医疗产品 <span className="text-ink-300 mx-2">·</span> 不诊断疾病<br />
+          自愿提交健康数据
+        </div>
+      </div>
+
+      <BottomNav active="home" />
     </div>
   );
 }

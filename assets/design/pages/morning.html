@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>晨起求诸己</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 375px;
+    min-height: 812px;
+    font-family: 'Noto Serif SC', serif;
+    background: #faf8f3;
+    color: #2a2520;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    position: relative;
+    background-image:
+      radial-gradient(ellipse at 110% 5%, rgba(232,160,168,0.22), transparent 35%),
+      radial-gradient(ellipse at 0% 95%, rgba(168,196,160,0.22), transparent 40%);
+    overflow: hidden;
+  }
+  body::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(45deg, transparent 0 3px, rgba(42,37,32,0.012) 3px 4px),
+      repeating-linear-gradient(-45deg, transparent 0 5px, rgba(42,37,32,0.01) 5px 6px);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .page {
+    position: relative; z-index: 2;
+    padding: 56px 32px 100px;
+    min-height: 812px;
+  }
+  .eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px; letter-spacing: 0.32em; color: #8a8078;
+  }
+  .title {
+    font-size: 36px; font-weight: 300;
+    letter-spacing: 0.16em; line-height: 1.15;
+    margin-top: 14px;
+  }
+  .subtitle {
+    font-size: 13px; font-weight: 300;
+    color: #6a6058; margin-top: 14px;
+    letter-spacing: 0.04em; line-height: 1.8;
+  }
+  /* hour badge */
+  .hour-badge {
+    display: flex; align-items: center; gap: 14px;
+    margin-top: 26px;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, rgba(245,221,224,0.4), rgba(250,248,243,0.2));
+    border: 1px solid rgba(232,160,168,0.25);
+    border-radius: 4px;
+    position: relative;
+  }
+  .hour-circle {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fff5f6 0%, #f5dde0 40%, #e8a0a8 100%);
+    box-shadow: inset -4px -4px 8px rgba(180,80,90,0.18);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .hour-circle::after {
+    content: "";
+    position: absolute;
+    top: 6px; right: 8px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: rgba(250,248,243,0.65);
+    filter: blur(2px);
+  }
+  .hour-meta { flex: 1; }
+  .hour-name {
+    font-size: 14px; font-weight: 500;
+    letter-spacing: 0.18em; color: #2a2520;
+  }
+  .hour-desc {
+    font-size: 11px; color: #8a8078;
+    margin-top: 4px; letter-spacing: 0.05em;
+    line-height: 1.6;
+  }
+  .hour-time {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    color: #8a8078;
+    letter-spacing: 0.1em;
+  }
+
+  .ink-divider {
+    height: 1px; margin: 28px 0;
+    background: linear-gradient(to right,
+      transparent, rgba(42,37,32,0.06) 15%, rgba(42,37,32,0.28) 50%,
+      rgba(42,37,32,0.06) 85%, transparent);
+    position: relative;
+  }
+  .ink-divider::after {
+    content: ""; position: absolute;
+    left: 47%; top: -1.5px;
+    width: 6px; height: 4px;
+    background: radial-gradient(ellipse, rgba(42,37,32,0.35), transparent 70%);
+    border-radius: 50%;
+  }
+
+  .lead {
+    font-size: 13px; color: #4a4238;
+    line-height: 1.85; letter-spacing: 0.05em;
+    margin-bottom: 18px;
+  }
+
+  /* Upload area */
+  .upload {
+    border: 1px dashed rgba(138,128,120,0.55);
+    border-radius: 4px;
+    padding: 26px 20px;
+    text-align: center;
+    background: rgba(250,248,243,0.4);
+    position: relative;
+  }
+  .upload-icon {
+    width: 36px; height: 36px;
+    margin: 0 auto 10px;
+    opacity: 0.55;
+  }
+  .upload-title {
+    font-size: 13px; color: #4a4238;
+    letter-spacing: 0.1em;
+  }
+  .upload-hint {
+    font-size: 11px; color: #8a8078;
+    margin-top: 6px; letter-spacing: 0.05em;
+  }
+  .skip-link {
+    display: block;
+    text-align: center;
+    margin-top: 12px;
+    font-size: 11px; color: #8a8078;
+    letter-spacing: 0.08em;
+  }
+  .skip-link a {
+    color: #6a6058;
+    border-bottom: 1px dotted rgba(138,128,120,0.5);
+    text-decoration: none;
+    padding-bottom: 1px;
+  }
+
+  /* Field block */
+  .field { margin-top: 22px; }
+  .field-label {
+    font-size: 12px; color: #4a4238;
+    letter-spacing: 0.2em; font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .field-label::before {
+    content: "";
+    display: inline-block;
+    width: 3px; height: 12px;
+    background: linear-gradient(180deg, #e8a0a8, #c08088);
+    margin-right: 8px;
+    vertical-align: -1px;
+  }
+  textarea {
+    width: 100%;
+    min-height: 96px;
+    padding: 14px 14px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #2a2520;
+    background: rgba(250,248,243,0.6);
+    border: 1px solid rgba(138,128,120,0.3);
+    border-radius: 3px;
+    resize: none;
+    outline: none;
+    letter-spacing: 0.02em;
+  }
+  textarea::placeholder { color: #b8aea4; }
+  textarea:focus { border-color: rgba(232,160,168,0.6); }
+
+  .btn {
+    display: block; width: 100%;
+    padding: 16px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 14px; letter-spacing: 0.4em;
+    text-indent: 0.4em;
+    text-align: center;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 22px;
+  }
+  .btn-primary {
+    border: 1px solid rgba(42,37,32,0.55);
+    background: rgba(250,248,243,0.4);
+    color: #2a2520;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(232,160,168,0.22), transparent 70%);
+    opacity: 0; transition: opacity .4s;
+  }
+  .btn-primary:hover::before { opacity: 1; }
+
+  /* bottom nav */
+  .nav {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 18px 32px;
+    display: flex; justify-content: space-between;
+    font-size: 11px; color: #8a8078;
+    letter-spacing: 0.15em;
+    border-top: 1px solid rgba(213,207,200,0.5);
+    background: rgba(250,248,243,0.7);
+    backdrop-filter: blur(4px);
+  }
+  .nav a {
+    color: #6a6058; text-decoration: none;
+    padding: 4px 0;
+  }
+  .nav a.active { color: #2a2520; border-bottom: 1px solid #2a2520; }
+
+  /* Plum branch top-right */
+  .plum {
+    position: absolute;
+    top: -10px; right: -20px;
+    width: 160px; height: 200px;
+    z-index: 1;
+    opacity: 0.85;
+    pointer-events: none;
+  }
+  .wash-green {
+    position: absolute;
+    bottom: 60px; left: -40px;
+    width: 200px; height: 160px;
+    background: radial-gradient(circle at 40% 60%, rgba(168,196,160,0.35), transparent 65%);
+    border-radius: 50%;
+    z-index: 1; pointer-events: none;
+    filter: blur(3px);
+  }
+</style>
+</head>
+<body>
+  <div class="plum">
+    <svg viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
+      <!-- branch -->
+      <path d="M 145 -5 Q 120 25 90 35 Q 60 50 35 80 Q 20 110 25 145"
+            stroke="#3a2f2a" stroke-width="1.4" fill="none" opacity="0.7"
+            stroke-linecap="round"/>
+      <path d="M 90 35 Q 105 55 130 70" stroke="#3a2f2a" stroke-width="1" fill="none" opacity="0.6" stroke-linecap="round"/>
+      <path d="M 60 60 Q 50 80 55 110" stroke="#3a2f2a" stroke-width="0.9" fill="none" opacity="0.55" stroke-linecap="round"/>
+      <!-- twigs -->
+      <path d="M 35 80 Q 25 75 18 80" stroke="#3a2f2a" stroke-width="0.7" fill="none" opacity="0.5"/>
+      <!-- plum blossoms: 5-petal flowers -->
+      <g>
+        <g transform="translate(135 18)">
+          <circle cx="0" cy="-5" r="4.5" fill="#f5dde0" opacity="0.9"/>
+          <circle cx="4.7" cy="-1.5" r="4.5" fill="#f0c4c8" opacity="0.9"/>
+          <circle cx="2.9" cy="4" r="4.5" fill="#e8a0a8" opacity="0.9"/>
+          <circle cx="-2.9" cy="4" r="4.5" fill="#f0c4c8" opacity="0.9"/>
+          <circle cx="-4.7" cy="-1.5" r="4.5" fill="#f5dde0" opacity="0.9"/>
+          <circle cx="0" cy="0" r="1.4" fill="#b85060"/>
+          <line x1="0" y1="0" x2="3" y2="-4" stroke="#b85060" stroke-width="0.4"/>
+          <line x1="0" y1="0" x2="-2" y2="3" stroke="#b85060" stroke-width="0.4"/>
+        </g>
+        <g transform="translate(95 48)">
+          <circle cx="0" cy="-4" r="4" fill="#f5dde0" opacity="0.9"/>
+          <circle cx="3.8" cy="-1.2" r="4" fill="#f0c4c8" opacity="0.9"/>
+          <circle cx="2.3" cy="3.2" r="4" fill="#e8a0a8" opacity="0.9"/>
+          <circle cx="-2.3" cy="3.2" r="4" fill="#f0c4c8" opacity="0.9"/>
+          <circle cx="-3.8" cy="-1.2" r="4" fill="#f5dde0" opacity="0.9"/>
+          <circle cx="0" cy="0" r="1.2" fill="#b85060"/>
+        </g>
+        <g transform="translate(50 78)">
+          <circle cx="0" cy="-4" r="4" fill="#f5dde0" opacity="0.85"/>
+          <circle cx="3.8" cy="-1.2" r="4" fill="#f0c4c8" opacity="0.85"/>
+          <circle cx="2.3" cy="3.2" r="4" fill="#e8a0a8" opacity="0.85"/>
+          <circle cx="-2.3" cy="3.2" r="4" fill="#f0c4c8" opacity="0.85"/>
+          <circle cx="-3.8" cy="-1.2" r="4" fill="#f5dde0" opacity="0.85"/>
+          <circle cx="0" cy="0" r="1.2" fill="#b85060"/>
+        </g>
+        <g transform="translate(28 130)">
+          <circle cx="0" cy="-3.5" r="3.5" fill="#f0c4c8" opacity="0.85"/>
+          <circle cx="3.3" cy="-1" r="3.5" fill="#e8a0a8" opacity="0.85"/>
+          <circle cx="2" cy="2.8" r="3.5" fill="#f5dde0" opacity="0.85"/>
+          <circle cx="-2" cy="2.8" r="3.5" fill="#f0c4c8" opacity="0.85"/>
+          <circle cx="-3.3" cy="-1" r="3.5" fill="#e8a0a8" opacity="0.85"/>
+          <circle cx="0" cy="0" r="1" fill="#b85060"/>
+        </g>
+        <!-- bud -->
+        <circle cx="125" cy="65" r="2" fill="#e8a0a8" opacity="0.7"/>
+        <circle cx="70" cy="100" r="1.6" fill="#f0c4c8" opacity="0.6"/>
+      </g>
+    </svg>
+  </div>
+  <div class="wash-green"></div>
+
+  <div class="page">
+    <div class="eyebrow">ASK MY BODY</div>
+    <h1 class="title">晨 起<br>求 诸 己</h1>
+    <p class="subtitle">醒来第一件事，<br>先问问你的身体。</p>
+
+    <div class="hour-badge">
+      <div class="hour-circle"></div>
+      <div class="hour-meta">
+        <div class="hour-name">卯时 · 大肠</div>
+        <div class="hour-desc">五至七时 · 宜起身、排浊、饮温水</div>
+      </div>
+      <div class="hour-time">5:42</div>
+    </div>
+
+    <div class="ink-divider"></div>
+
+    <p class="lead">给我睡眠记录，<br>让 AI 读懂你的昨晚。</p>
+
+    <div class="upload">
+      <svg class="upload-icon" viewBox="0 0 36 36" fill="none">
+        <circle cx="18" cy="18" r="15" stroke="#8a8078" stroke-width="0.8" stroke-dasharray="2 2"/>
+        <path d="M 18 11 L 18 23 M 12 17 L 18 11 L 24 17" stroke="#6a6058" stroke-width="1" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div class="upload-title">导入 Apple Health 数据</div>
+      <div class="upload-hint">点击上传 · 或由快捷指令自动同步</div>
+    </div>
+    <div class="skip-link">
+      <a href="#">没有手表数据？跳过，直接生成报告</a>
+    </div>
+
+    <div class="field">
+      <div class="field-label">身体感受</div>
+      <textarea placeholder="比如：昨晚做梦了、肩膀有点酸、精神不错……"></textarea>
+    </div>
+
+    <button class="btn btn-primary">生 成 今 晨 报 告</button>
+  </div>
+
+  <nav class="nav">
+    <a href="sleep.html">睡前记录</a>
+    <a href="journal.html">身体日志</a>
+    <a href="home.html">首页</a>
+  </nav>
+</body>
+</html>

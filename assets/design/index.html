@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Ask My Body 求诸己 — UI Designs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #ece7dc; font-family: 'Noto Serif SC', serif; }
+  .device-wrap {
+    width: 375px; height: 812px;
+    border-radius: 36px;
+    overflow: hidden;
+    background: #faf8f3;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.6) inset,
+      0 0 0 1px rgba(42,37,32,0.12);
+    position: relative;
+  }
+  .device-wrap iframe {
+    width: 375px; height: 812px;
+    border: 0;
+    display: block;
+  }
+  /* Subtle status bar */
+  .statusbar {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 44px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 26px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    color: #2a2520;
+    letter-spacing: 0.05em;
+    z-index: 5;
+    pointer-events: none;
+  }
+  .statusbar .right { display: flex; gap: 6px; align-items: center; opacity: 0.7; }
+  .statusbar .dot { width: 4px; height: 4px; border-radius: 50%; background: #2a2520; }
+  .sleep-tone { color: #3a3028 !important; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="design-canvas.jsx"></script>
+
+<script type="text/babel">
+const { useState } = React;
+
+function Phone({ src, dark = false }) {
+  return (
+    <div className="device-wrap">
+      <div className="statusbar">
+        <span className={dark ? 'sleep-tone' : ''}>{src.includes('sleep') ? '22:48' : src.includes('morning') ? '5:42' : src.includes('checkin') ? '14:08' : '9:24'}</span>
+        <span className={dark ? 'sleep-tone right' : 'right'}>
+          <span className="dot"></span>
+          <span className="dot"></span>
+          <span className="dot"></span>
+        </span>
+      </div>
+      <iframe src={src} title={src} loading="lazy"></iframe>
+    </div>
+  );
+}
+
+function App() {
+  const sections = [
+    {
+      id: 'flows',
+      title: '主要流程 · Five Pages',
+      artboards: [
+        { id: 'home', label: '01 · 首页 Home', w: 415, h: 852, content: <Phone src="pages/home.html" /> },
+        { id: 'morning', label: '02 · 晨起求诸己 Morning', w: 415, h: 852, content: <Phone src="pages/morning.html" /> },
+        { id: 'checkin', label: '03 · 随时求诸己 Check-in', w: 415, h: 852, content: <Phone src="pages/checkin.html" /> },
+        { id: 'journal', label: '04 · 身体日志 Journal', w: 415, h: 852, content: <Phone src="pages/journal.html" /> },
+        { id: 'sleep', label: '05 · 睡前记录 Sleep', w: 415, h: 852, content: <Phone src="pages/sleep.html" dark /> },
+      ]
+    }
+  ];
+
+  return (
+    <DesignCanvas
+      title="求 诸 己"
+      subtitle="Ask My Body · 工笔水墨 UI · 五屏设计"
+    >
+      {sections.map(s => (
+        <DCSection key={s.id} id={s.id} title={s.title}>
+          {s.artboards.map(a => (
+            <DCArtboard key={a.id} id={a.id} label={a.label} width={a.w} height={a.h}>
+              <div style={{padding:20, background:'#ece7dc', width:'100%', height:'100%', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                {a.content}
+              </div>
+            </DCArtboard>
+          ))}
+        </DCSection>
+      ))}
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

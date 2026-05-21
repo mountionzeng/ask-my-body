@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>睡前记录</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 375px;
+    min-height: 812px;
+    font-family: 'Noto Serif SC', serif;
+    background: #f0ece4;
+    color: #2a2520;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    position: relative;
+    background-image:
+      radial-gradient(ellipse at 100% 0%, rgba(180,100,110,0.25), transparent 45%),
+      radial-gradient(ellipse at 0% 100%, rgba(120,90,100,0.20), transparent 45%),
+      radial-gradient(ellipse at 50% 50%, rgba(60,50,55,0.06), transparent 70%);
+    background-color: #ece5d8;
+    overflow: hidden;
+  }
+  body::before {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(45deg, transparent 0 3px, rgba(42,37,32,0.02) 3px 4px),
+      repeating-linear-gradient(-45deg, transparent 0 5px, rgba(42,37,32,0.015) 5px 6px);
+    pointer-events: none; z-index: 1;
+  }
+  .page {
+    position: relative; z-index: 2;
+    padding: 56px 32px 90px;
+    min-height: 812px;
+  }
+  .eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px; letter-spacing: 0.32em; color: #7a6e64;
+  }
+  .title {
+    font-size: 40px; font-weight: 300;
+    letter-spacing: 0.18em; line-height: 1.1;
+    color: #2a2520;
+    margin-top: 14px;
+  }
+  .subtitle {
+    font-size: 13px; font-weight: 300;
+    color: #5a4e44; margin-top: 14px;
+    letter-spacing: 0.05em; line-height: 1.8;
+  }
+
+  /* hour: moon */
+  .hour-badge {
+    display: flex; align-items: center; gap: 14px;
+    margin-top: 26px;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, rgba(42,37,32,0.06), rgba(232,222,206,0.4));
+    border: 1px solid rgba(120,108,98,0.25);
+    border-radius: 4px;
+  }
+  .moon {
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fdf6e3 0%, #e8dfc8 50%, #b8a890 100%);
+    box-shadow: inset -8px -6px 10px rgba(60,50,40,0.25),
+                0 0 18px rgba(253,246,227,0.4);
+    position: relative; flex-shrink: 0;
+    overflow: hidden;
+  }
+  .moon::before {
+    content: ""; position: absolute;
+    top: 8px; left: 22px;
+    width: 6px; height: 6px;
+    background: rgba(140,120,100,0.4);
+    border-radius: 50%;
+    box-shadow: 6px 8px 0 -2px rgba(140,120,100,0.3),
+                -4px 14px 0 -1px rgba(140,120,100,0.35);
+  }
+  .hour-name {
+    font-size: 14px; font-weight: 500;
+    letter-spacing: 0.18em; color: #2a2520;
+  }
+  .hour-desc {
+    font-size: 11px; color: #7a6e64;
+    margin-top: 4px; letter-spacing: 0.05em;
+  }
+  .hour-time {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px; color: #7a6e64;
+    letter-spacing: 0.1em; margin-left: auto;
+  }
+
+  .ink-divider {
+    height: 1px; margin: 26px 0;
+    background: linear-gradient(to right,
+      transparent, rgba(42,37,32,0.10) 15%, rgba(42,37,32,0.35) 50%,
+      rgba(42,37,32,0.10) 85%, transparent);
+    position: relative;
+  }
+  .ink-divider::after {
+    content: ""; position: absolute;
+    left: 47%; top: -1.5px; width: 6px; height: 4px;
+    background: radial-gradient(ellipse, rgba(42,37,32,0.4), transparent 70%);
+    border-radius: 50%;
+  }
+
+  .lead {
+    font-size: 13.5px; color: #3a3028;
+    line-height: 1.9; letter-spacing: 0.04em;
+    margin-bottom: 18px;
+  }
+  .lead em {
+    font-style: normal;
+    color: #b85060;
+    border-bottom: 1px dotted rgba(184,80,96,0.3);
+    padding-bottom: 1px;
+  }
+
+  .field-label {
+    font-size: 12px; color: #3a3028;
+    letter-spacing: 0.24em; font-weight: 500;
+    margin-bottom: 12px;
+    display: flex; align-items: center;
+  }
+  .field-label::before {
+    content: ""; display: inline-block;
+    width: 3px; height: 12px;
+    background: linear-gradient(180deg, #b85060, #804048);
+    margin-right: 10px;
+  }
+  .field-label .ts {
+    margin-left: auto;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px; color: #8a7e74;
+    letter-spacing: 0.1em; font-weight: 400;
+  }
+  textarea {
+    width: 100%;
+    min-height: 160px;
+    padding: 16px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 13.5px; line-height: 1.95;
+    color: #2a2520;
+    background: rgba(248,242,232,0.55);
+    border: 1px solid rgba(120,108,98,0.3);
+    border-radius: 3px;
+    resize: none; outline: none;
+    letter-spacing: 0.03em;
+  }
+  textarea::placeholder { color: #a89a8c; line-height: 1.95; }
+  textarea:focus { border-color: rgba(184,80,96,0.5); }
+
+  .hint {
+    display: flex; align-items: flex-start; gap: 8px;
+    margin-top: 12px;
+    font-size: 11px; color: #7a6e64;
+    letter-spacing: 0.04em; line-height: 1.6;
+  }
+  .hint-dot {
+    width: 4px; height: 4px;
+    margin-top: 7px;
+    background: radial-gradient(circle, #b85060, transparent 70%);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* bottom action row */
+  .action-row {
+    margin-top: 28px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .action-text {
+    font-size: 11.5px; color: #7a6e64;
+    line-height: 1.7; letter-spacing: 0.05em;
+    flex: 1;
+  }
+  .action-text strong {
+    color: #4a4038; font-weight: 500;
+  }
+  .btn-record {
+    padding: 14px 22px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 14px; letter-spacing: 0.4em;
+    text-indent: 0.4em;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 1px solid rgba(42,37,32,0.6);
+    background: rgba(248,242,232,0.5);
+    color: #2a2520;
+    position: relative; overflow: hidden;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .btn-record::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(184,80,96,0.18), transparent 70%);
+    opacity: 0; transition: opacity .4s;
+  }
+  .btn-record:hover::before { opacity: 1; }
+
+  /* stars */
+  .stars {
+    position: absolute;
+    top: 40px; right: 40px;
+    width: 80px; height: 60px;
+    z-index: 1; pointer-events: none;
+  }
+  .star {
+    position: absolute;
+    background: radial-gradient(circle, rgba(255,245,220,0.9), transparent 60%);
+    border-radius: 50%;
+  }
+  .star.s1 { width: 4px; height: 4px; top: 10px; left: 20px; }
+  .star.s2 { width: 3px; height: 3px; top: 30px; left: 50px; }
+  .star.s3 { width: 2px; height: 2px; top: 5px; left: 60px; }
+  .star.s4 { width: 2px; height: 2px; top: 45px; left: 10px; }
+
+  /* deep pink wash bottom */
+  .wash-deep {
+    position: absolute;
+    bottom: -60px; right: -60px;
+    width: 280px; height: 220px;
+    background: radial-gradient(circle at 60% 50%, rgba(180,80,96,0.20), transparent 60%);
+    border-radius: 50%;
+    z-index: 1; pointer-events: none;
+    filter: blur(2px);
+  }
+  /* sleeping plum branch silhouette top-left */
+  .branch {
+    position: absolute;
+    top: -10px; left: -20px;
+    width: 130px; height: 120px;
+    z-index: 1; opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .nav {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 18px 32px;
+    display: flex; justify-content: space-between;
+    font-size: 11px; color: #7a6e64;
+    letter-spacing: 0.15em;
+    border-top: 1px solid rgba(120,108,98,0.3);
+    background: rgba(236,229,216,0.7);
+    backdrop-filter: blur(4px);
+  }
+  .nav a { color: #5a4e44; text-decoration: none; padding: 4px 0; }
+  .nav a.active { color: #2a2520; border-bottom: 1px solid #2a2520; }
+</style>
+</head>
+<body>
+  <div class="stars">
+    <div class="star s1"></div>
+    <div class="star s2"></div>
+    <div class="star s3"></div>
+    <div class="star s4"></div>
+  </div>
+  <div class="branch">
+    <svg viewBox="0 0 130 120" xmlns="http://www.w3.org/2000/svg">
+      <path d="M -5 10 Q 30 25 60 35 Q 90 50 125 60"
+            stroke="#3a2f2a" stroke-width="1.2" fill="none" opacity="0.7" stroke-linecap="round"/>
+      <path d="M 60 35 Q 70 55 65 90" stroke="#3a2f2a" stroke-width="0.9" fill="none" opacity="0.55" stroke-linecap="round"/>
+      <g>
+        <g transform="translate(35 22)">
+          <circle cx="0" cy="-3.5" r="3.5" fill="#e8a0a8" opacity="0.8"/>
+          <circle cx="3.3" cy="-1" r="3.5" fill="#c87080" opacity="0.85"/>
+          <circle cx="2" cy="2.8" r="3.5" fill="#a85068" opacity="0.85"/>
+          <circle cx="-2" cy="2.8" r="3.5" fill="#c87080" opacity="0.85"/>
+          <circle cx="-3.3" cy="-1" r="3.5" fill="#e8a0a8" opacity="0.8"/>
+          <circle cx="0" cy="0" r="1" fill="#6b1f30"/>
+        </g>
+        <g transform="translate(85 48)">
+          <circle cx="0" cy="-3" r="3" fill="#c87080" opacity="0.85"/>
+          <circle cx="2.9" cy="-0.9" r="3" fill="#a85068" opacity="0.85"/>
+          <circle cx="1.8" cy="2.4" r="3" fill="#e8a0a8" opacity="0.8"/>
+          <circle cx="-1.8" cy="2.4" r="3" fill="#c87080" opacity="0.85"/>
+          <circle cx="-2.9" cy="-0.9" r="3" fill="#a85068" opacity="0.85"/>
+          <circle cx="0" cy="0" r="0.9" fill="#6b1f30"/>
+        </g>
+        <circle cx="68" cy="78" r="1.6" fill="#a85068" opacity="0.7"/>
+      </g>
+    </svg>
+  </div>
+  <div class="wash-deep"></div>
+
+  <div class="page">
+    <div class="eyebrow">ASK MY BODY</div>
+    <h1 class="title">睡 前<br>记 录</h1>
+    <p class="subtitle">睡前写几句，<em style="color:#b85060;font-style:normal;">守夜分析师</em>今晚读。</p>
+
+    <div class="hour-badge">
+      <div class="moon"></div>
+      <div>
+        <div class="hour-name">亥时 · 三焦</div>
+        <div class="hour-desc">廿一至廿三时 · 宜静养、调息、入梦</div>
+      </div>
+      <div class="hour-time">22:48</div>
+    </div>
+
+    <div class="ink-divider"></div>
+
+    <p class="lead">今天身体感觉如何？<br>有什么想留给<em>守夜分析师</em>的？</p>
+
+    <div class="field-label">
+      留 言
+      <span class="ts">22:48 · 廿一日</span>
+    </div>
+    <textarea placeholder="今天有点累，脖子酸。&#10;睡前有点焦虑，明天要开大会……&#10;&#10;想到什么就写什么，不用工整。"></textarea>
+
+    <div class="hint">
+      <div class="hint-dot"></div>
+      <div>可选 · Apple Watch 数据由 iOS 快捷指令自动同步</div>
+    </div>
+
+    <div class="action-row">
+      <div class="action-text">
+        <strong>守夜分析师</strong>会在你入睡后<br>翻看你的留言与身体数据。
+      </div>
+      <button class="btn-record">记 下 来</button>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <a href="morning.html">晨起报告</a>
+    <a href="journal.html">身体日志</a>
+    <a href="home.html">首页</a>
+  </nav>
+</body>
+</html>
