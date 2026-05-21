@@ -102,10 +102,10 @@ export default function MorningPage() {
 
       <div className="relative z-10">
         <p className="font-display text-[11px] tracking-super text-ink-400">ASK MY BODY</p>
-        <h1 className="mt-3.5 text-4xl font-light leading-tight tracking-widest text-ink-800">
+        <h1 className="mt-3.5 font-kai text-4xl font-light leading-tight tracking-widest text-ink-800">
           晨 起<br />求 诸 己
         </h1>
-        <p className="mt-3.5 text-[13px] font-light leading-relaxed text-ink-500">
+        <p className="mt-3.5 font-kai text-[14px] font-light leading-relaxed text-ink-500">
           醒来第一件事，<br />先问问你的身体。
         </p>
 
@@ -333,6 +333,50 @@ export default function MorningPage() {
               className="prose-report space-y-3 text-[13px] leading-relaxed text-ink-700"
               dangerouslySetInnerHTML={{ __html: markdownToHtml(report.content) }}
             />
+
+            {/* Dream interpretation — always visible in done step */}
+            <div className="space-y-3 border-t border-ink-200/50 pt-5">
+              <button
+                onClick={() => setDreamOpen(!dreamOpen)}
+                className="flex w-full items-center justify-center gap-2 rounded-[3px] border px-4 py-3 text-[13px] tracking-wider transition"
+                style={{
+                  borderColor: dreamOpen ? "rgba(184,80,96,0.45)" : "rgba(232,160,168,0.5)",
+                  background: dreamOpen ? "linear-gradient(180deg, #f5dde0, #f0c4c8)" : "linear-gradient(180deg, rgba(245,221,224,0.4), rgba(250,248,243,0.2))",
+                  color: dreamOpen ? "#4a2528" : "#6b3a40",
+                }}
+              >
+                <span>🌙</span>
+                <span className="font-kai">{dreamOpen ? "收起解梦" : "昨晚做梦了？点这里解梦"}</span>
+              </button>
+              {dreamOpen && (
+                <div className="space-y-3">
+                  <textarea
+                    value={dreamText}
+                    onChange={(e) => setDreamText(e.target.value)}
+                    placeholder="描述你的梦境...比如：梦到在一片竹林里迷路了、梦见已故的亲人、梦到考试迟到..."
+                    rows={3}
+                    className="w-full resize-none rounded-[3px] border px-3.5 py-3 text-[13px] leading-relaxed text-ink-800 outline-none placeholder:text-ink-400"
+                    style={{
+                      borderColor: "rgba(138,128,120,0.3)",
+                      background: "rgba(250,248,243,0.6)",
+                    }}
+                  />
+                  <button
+                    onClick={() => handleGenerate(true)}
+                    disabled={!dreamText.trim()}
+                    className="btn-glow w-full rounded-[3px] border py-3 text-[13px] tracking-super text-ink-800 disabled:opacity-40"
+                    style={{
+                      borderColor: "rgba(42,37,32,0.55)",
+                      background: "rgba(250,248,243,0.4)",
+                      textIndent: "0.4em",
+                    }}
+                  >
+                    解 梦 · 重 新 生 成 报 告
+                  </button>
+                </div>
+              )}
+            </div>
+
             <div className="flex items-center justify-between border-t border-ink-200/50 pt-4 text-[11px] text-ink-400">
               <span>
                 {report.model} ·{" "}

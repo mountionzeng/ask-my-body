@@ -9,6 +9,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         serif: ['"Noto Serif SC"', "ui-serif", "Georgia", "serif"],
+        kai: ['"LXGW WenKai TC"', '"Noto Serif SC"', "ui-serif", "Georgia", "serif"],
         sans: ['"Inter"', "ui-sans-serif", "system-ui", "sans-serif"],
         display: ['"Cormorant Garamond"', "ui-serif", "Georgia", "serif"],
       },

@@ -30,7 +30,7 @@ export default function JournalPage() {
 
       <div className="relative z-10">
         <p className="font-display text-[11px] tracking-super text-ink-400">ASK MY BODY</p>
-        <h1 className="mt-3.5 text-[40px] font-light leading-[1.1] tracking-widest text-ink-800">
+        <h1 className="mt-3.5 font-kai text-[40px] font-light leading-[1.1] tracking-widest text-ink-800">
           身 体<br />日 志
         </h1>
         <p className="mt-3.5 text-[13px] font-light leading-relaxed text-ink-500">

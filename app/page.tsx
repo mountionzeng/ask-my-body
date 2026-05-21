@@ -20,10 +20,10 @@ export default function Home() {
       {/* Content */}
       <div className="relative z-10 flex flex-1 flex-col">
         <p className="font-display text-[11px] tracking-super text-ink-400">ASK MY BODY</p>
-        <h1 className="mt-3.5 text-[56px] font-light leading-[1.05] tracking-wider text-ink-800">
+        <h1 className="mt-3.5 font-kai text-[56px] font-light leading-[1.05] tracking-wider text-ink-800">
           求<br />诸己
         </h1>
-        <p className="mt-4 text-[13px] font-light leading-relaxed tracking-wide text-ink-500">
+        <p className="mt-4 font-kai text-[14px] font-light leading-relaxed tracking-wide text-ink-500">
           身体会知道答案。<br />静下来，听她说。
         </p>
 

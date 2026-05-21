@@ -88,10 +88,10 @@ export default function CheckinPage() {
 
       <div className="relative z-10">
         <p className="font-display text-[11px] tracking-super text-ink-400">ASK MY BODY</p>
-        <h1 className="mt-3.5 text-[44px] font-light leading-[1.1] tracking-widest text-ink-800">
+        <h1 className="mt-3.5 font-kai text-[44px] font-light leading-[1.1] tracking-widest text-ink-800">
           求 诸 己
         </h1>
-        <p className="mt-3.5 text-[13px] font-light leading-relaxed text-ink-500">
+        <p className="mt-3.5 font-kai text-[14px] font-light leading-relaxed text-ink-500">
           此刻，你的身体想说什么？
         </p>
 

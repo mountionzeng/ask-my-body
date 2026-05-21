@@ -60,10 +60,10 @@ export default function SleepPage() {
 
       <div className="relative z-10">
         <p className="font-display text-[11px] tracking-super" style={{ color: "#7a6e64" }}>ASK MY BODY</p>
-        <h1 className="mt-3.5 text-[40px] font-light leading-[1.1] tracking-widest text-ink-800">
+        <h1 className="mt-3.5 font-kai text-[40px] font-light leading-[1.1] tracking-widest text-ink-800">
           睡 前<br />记 录
         </h1>
-        <p className="mt-3.5 text-[13px] font-light leading-relaxed" style={{ color: "#5a4e44" }}>
+        <p className="mt-3.5 font-kai text-[14px] font-light leading-relaxed" style={{ color: "#5a4e44" }}>
           睡前写几句，<span style={{ color: "#b85060" }}>守夜分析师</span>今晚读。
         </p>
 
