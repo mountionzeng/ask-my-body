@@ -99,7 +99,7 @@ export default function MorningPage() {
       {/* Header */}
       <header className="space-y-4 text-center">
         <p className="text-xs uppercase tracking-widest text-ink-400">Ask My Body</p>
-        <h1 className="font-serif text-4xl font-light text-ink-900">晨起问身</h1>
+        <h1 className="font-serif text-4xl font-light text-ink-900">晨起求诸己</h1>
         <p className="font-serif text-sm text-ink-600">醒来第一件事，先问问你的身体。</p>
       </header>
 
@@ -315,7 +315,7 @@ export default function MorningPage() {
               onClick={() => { setStep("idle"); setPreviews([]); setWatchData(null); }}
               className="underline-offset-2 hover:text-ink-600 hover:underline"
             >
-              重新问身
+              重新求诸己
             </button>
           </div>
         </article>

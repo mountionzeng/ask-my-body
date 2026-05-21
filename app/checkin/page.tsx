@@ -86,7 +86,7 @@ export default function CheckinPage() {
           Ask My Body
         </p>
         <h1 className="font-serif text-4xl font-light text-ink-900">
-          问身
+          求诸己
         </h1>
         <p className="font-serif text-sm text-ink-600">
           此刻，你的身体想说什么？
@@ -164,7 +164,7 @@ export default function CheckinPage() {
               onClick={handleSubmit}
               className="inline-flex items-center justify-center border border-ink-800 px-10 py-3 font-serif text-sm tracking-widest text-ink-900 transition hover:bg-ink-800 hover:text-ink-50"
             >
-              问身
+              求诸己
             </button>
           </div>
         </section>
@@ -209,7 +209,7 @@ export default function CheckinPage() {
               }}
               className="underline-offset-2 hover:text-ink-600 hover:underline"
             >
-              再次问身
+              再次求诸己
             </button>
           </div>
         </article>
@@ -219,7 +219,7 @@ export default function CheckinPage() {
 
       <footer className="flex items-center justify-center gap-6 text-xs text-ink-400">
         <Link href="/morning" className="underline-offset-2 hover:text-ink-600 hover:underline">
-          晨起问身
+          晨起求诸己
         </Link>
         <span className="text-ink-200">·</span>
         <Link href="/journal" className="underline-offset-2 hover:text-ink-600 hover:underline">

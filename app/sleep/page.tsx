@@ -41,7 +41,7 @@ export default function SleepPage() {
         <p className="text-xs uppercase tracking-widest text-ink-400">
           Ask My Body
         </p>
-        <h1 className="font-serif text-4xl font-light text-ink-900">睡前问身</h1>
+        <h1 className="font-serif text-4xl font-light text-ink-900">睡前记录</h1>
         <p className="font-serif text-sm text-ink-600">
           睡前写几句，守夜分析师今晚读。
         </p>
@@ -68,7 +68,7 @@ export default function SleepPage() {
             href="/morning"
             className="inline-block font-serif text-sm text-ink-600 underline underline-offset-4"
           >
-            去晨起问身 →
+            去晨起求诸己 →
           </Link>
         </section>
       ) : (

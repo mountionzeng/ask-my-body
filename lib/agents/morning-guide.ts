@@ -1,7 +1,7 @@
 /**
  * Agent 2 — 晨间引导师
  * 在用户早晨打开 App 或上传手表截图后运行
- * 综合睡眠分期 + 脉象 + 夜间分析，生成「今晨问身报告」
+ * 综合睡眠分期 + 脉象 + 夜间分析，生成「今晨求诸己报告」
  */
 
 import { readFileSync } from "fs";
@@ -138,7 +138,7 @@ ${zishiAnalysis ? `【子时守夜】\n${zishiAnalysis.content}` : "（子时守
 
 ${yinshiAnalysis ? `【寅时守夜】\n${yinshiAnalysis.content}` : "（寅时守夜未运行）"}
 
-请综合以上所有信息（特别关注用户的自述感受），生成今晨的「问身报告」。
+请综合以上所有信息（特别关注用户的自述感受），生成今晨的「求诸己报告」。
 报告中 date 使用：${today}
   `.trim();
 
@@ -204,7 +204,7 @@ function ensureMarkdown(raw: string, date: string, shichen: string): string {
   // 是 JSON — 把内容拼成 Markdown 散文
   const lines: string[] = [];
   lines.push("---", "");
-  lines.push(`## 今晨问身 · ${date}`, "");
+  lines.push(`## 今晨求诸己 · ${date}`, "");
 
   if (data.greeting) lines.push(`> ${data.greeting}`, "");
 

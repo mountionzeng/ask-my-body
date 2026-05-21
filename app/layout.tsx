@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Ask My Body 问身",
-  description: "替你守夜的问身 Agent — 一个人就是一座庙",
+  title: "Ask My Body 求诸己",
+  description: "替你守夜的养生 Agent — 身体会知道答案",
 };
 
 export default function RootLayout({

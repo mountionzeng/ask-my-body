@@ -8,10 +8,10 @@ export default function Home() {
           Ask My Body
         </p>
         <h1 className="font-serif text-5xl font-light leading-tight text-ink-900">
-          问身
+          求诸己
         </h1>
         <p className="font-serif text-base text-ink-600">
-          一个人就是一座庙。
+          身体会知道答案。
         </p>
       </header>
 
@@ -28,18 +28,18 @@ export default function Home() {
           href="/morning"
           className="inline-flex items-center justify-center rounded-none border border-ink-800 px-8 py-3 font-serif text-sm tracking-widest text-ink-900 transition hover:bg-ink-800 hover:text-ink-50"
         >
-          晨起问身
+          晨起求诸己
         </Link>
 
         <p className="pt-6 text-xs text-ink-400">
-          它不替你住进庙里 — 它只是替你守夜，让你回家的时候，灯还亮着。
+          它不替你做决定 — 它只是替你守夜，让你醒来时，答案已在身边。
         </p>
 
         <Link
           href="/checkin"
           className="inline-flex items-center justify-center rounded-none border border-ink-400 px-6 py-2 font-serif text-xs tracking-widest text-ink-600 transition hover:border-ink-800 hover:text-ink-900"
         >
-          随时问身
+          随时求诸己
         </Link>
 
         <div className="flex items-center justify-center gap-6 pt-2">

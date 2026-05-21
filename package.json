@@ -2,7 +2,7 @@
   "name": "ask-my-body",
   "version": "0.1.0",
   "private": true,
-  "description": "Ask My Body 问身 — 替你守夜的问身 Agent",
+  "description": "Ask My Body 求诸己 — 替你守夜的养生 Agent",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

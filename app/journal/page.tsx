@@ -29,7 +29,7 @@ export default function JournalPage() {
         <p className="font-serif text-sm text-ink-600">
           {reports.length > 0
             ? `已记录 ${reports.length} 天`
-            : "近 7 天的问身记录"}
+            : "近 7 天的求诸己记录"}
         </p>
       </header>
 
@@ -69,13 +69,13 @@ export default function JournalPage() {
         <section className="space-y-4 text-center">
           <p className="font-serif text-sm text-ink-600">还没有记录。</p>
           <p className="font-serif text-sm text-ink-400">
-            每天早晨用「晨起问身」，这里会自动积累你的身体日志。
+            每天早晨用「晨起求诸己」，这里会自动积累你的身体日志。
           </p>
           <Link
             href="/morning"
             className="inline-block font-serif text-sm text-ink-600 underline underline-offset-4"
           >
-            去晨起问身 →
+            去晨起求诸己 →
           </Link>
         </section>
       ) : (
