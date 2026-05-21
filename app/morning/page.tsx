@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import ShichenBadge from "@/components/ShichenBadge";
+import { saveReportLocal } from "@/lib/local-store";
 import type { WatchData } from "@/app/api/parse-watch/route";
 
 interface MorningReport {
@@ -71,6 +72,15 @@ export default function MorningPage() {
       if (!res.ok) throw new Error(json.error ?? "生成失败");
       setReport(json.report);
       setStep("done");
+      // Save to localStorage for journal history
+      saveReportLocal({
+        ...json.report,
+        hrv: watchData?.hrv_ms ?? undefined,
+        rhr: watchData?.heart_rate_bpm ?? undefined,
+        sleep_hours: watchData?.total_sleep_hours ?? undefined,
+        deep_sleep_minutes: watchData?.deep_sleep_minutes ?? undefined,
+        rem_sleep_minutes: watchData?.rem_sleep_minutes ?? undefined,
+      });
     } catch (e) {
       setError(String(e));
       setStep("ready");
