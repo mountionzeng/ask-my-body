@@ -3,7 +3,8 @@
  * when KV_REST_API_URL is not configured (local dev without KV).
  */
 
-import { kv as vercelKV } from "@vercel/kv";
+// ⚠️  不在顶层 import @vercel/kv — 它会在模块加载时验证 KV_REST_API_URL，
+//    URL 为空时抛 SyntaxError。改为按需动态 import，只在真正需要时加载。
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -41,17 +42,19 @@ const isKVConfigured =
 
 async function get<T>(key: string): Promise<T | null> {
   if (isKVConfigured) {
-    return vercelKV.get<T>(key);
+    const { kv } = await import("@vercel/kv");
+    return kv.get<T>(key);
   }
   return (memStore.get(key) as T) ?? null;
 }
 
 async function set(key: string, value: unknown, ex?: number): Promise<void> {
   if (isKVConfigured) {
+    const { kv } = await import("@vercel/kv");
     if (ex) {
-      await vercelKV.set(key, value, { ex });
+      await kv.set(key, value, { ex });
     } else {
-      await vercelKV.set(key, value);
+      await kv.set(key, value);
     }
   } else {
     memStore.set(key, value);
@@ -60,7 +63,8 @@ async function set(key: string, value: unknown, ex?: number): Promise<void> {
 
 async function keys(pattern: string): Promise<string[]> {
   if (isKVConfigured) {
-    return vercelKV.keys(pattern);
+    const { kv } = await import("@vercel/kv");
+    return kv.keys(pattern);
   }
   const prefix = pattern.replace("*", "");
   return Array.from(memStore.keys()).filter((k) => k.startsWith(prefix));
