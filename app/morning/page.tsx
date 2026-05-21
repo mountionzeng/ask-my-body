@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState, useTransition, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import ShichenBadge from "@/components/ShichenBadge";
-import { fetchTodayReport, generateMorningReport } from "@/app/actions";
 import type { WatchData } from "@/app/api/parse-watch/route";
 
 interface MorningReport {
@@ -21,14 +20,16 @@ export default function MorningPage() {
   const [previews, setPreviews] = useState<string[]>([]);
   const [report, setReport] = useState<MorningReport | null>(null);
   const [error, setError] = useState("");
-  const [isPending, startTransition] = useTransition();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 启动时检查今日缓存报告
   useEffect(() => {
-    fetchTodayReport().then((r) => {
-      if (r) { setReport(r); setStep("done"); }
-    });
+    fetch("/api/wake-up")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.ok && json.report) { setReport(json.report); setStep("done"); }
+      })
+      .catch(() => {});
   }, []);
 
   // 上传并解析截图
@@ -57,19 +58,23 @@ export default function MorningPage() {
   }
 
   // 生成今晨报告
-  function handleGenerate(force = false) {
+  async function handleGenerate(force = false) {
     setError("");
     setStep("generating");
-    startTransition(async () => {
-      try {
-        const r = await generateMorningReport(watchData, force);
-        setReport(r);
-        setStep("done");
-      } catch (e) {
-        setError(String(e));
-        setStep("ready");
-      }
-    });
+    try {
+      const res = await fetch("/api/generate-report", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...watchData, force }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? "生成失败");
+      setReport(json.report);
+      setStep("done");
+    } catch (e) {
+      setError(String(e));
+      setStep("ready");
+    }
   }
 
   // 拖拽支持
@@ -231,7 +236,7 @@ export default function MorningPage() {
           <div className="flex flex-col items-center gap-3">
             <button
               onClick={() => handleGenerate(false)}
-              disabled={isPending}
+              disabled={false}
               className="inline-flex items-center justify-center rounded-none border border-ink-800 px-10 py-3 font-serif text-sm tracking-widest text-ink-900 transition hover:bg-ink-800 hover:text-ink-50 disabled:opacity-40"
             >
               生成今晨报告

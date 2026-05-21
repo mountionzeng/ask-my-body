@@ -9,6 +9,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyShortcutSecret } from "@/lib/auth";
 import { runMorningGuide } from "@/lib/agents/morning-guide";
 
+export const maxDuration = 60;
+
 export async function POST(req: NextRequest) {
   if (!verifyShortcutSecret(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
