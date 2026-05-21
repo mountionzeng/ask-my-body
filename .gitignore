@@ -39,3 +39,7 @@ next-env.d.ts
 
 # 黑客松：临时占位文件
 .tmp/
+
+# env files
+.env.local
+.env*.local
