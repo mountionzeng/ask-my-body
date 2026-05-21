@@ -40,6 +40,8 @@ export interface MorningInput {
   // 中医脉象（脉诊 App 数据）
   pulse_diagnosis?: string;
   pulse_description?: string;
+  // 用户主诉
+  body_feeling?: string;
   // 控制
   forceRegenerate?: boolean;
 }
@@ -129,12 +131,14 @@ ${shichen.morningAdvice ? `晨间提示：${shichen.morningAdvice}` : ""}
 ${sleepStagesText}
 ${pulseText}
 
+用户晨间自述：${input.body_feeling ?? "（无）"}
+
 夜间守夜笔记：
 ${zishiAnalysis ? `【子时守夜】\n${zishiAnalysis.content}` : "（子时守夜未运行）"}
 
 ${yinshiAnalysis ? `【寅时守夜】\n${yinshiAnalysis.content}` : "（寅时守夜未运行）"}
 
-请综合以上所有信息，生成今晨的「问身报告」。
+请综合以上所有信息（特别关注用户的自述感受），生成今晨的「问身报告」。
 报告中 date 使用：${today}
   `.trim();
 

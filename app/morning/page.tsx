@@ -21,6 +21,7 @@ export default function MorningPage() {
   const [previews, setPreviews] = useState<string[]>([]);
   const [report, setReport] = useState<MorningReport | null>(null);
   const [error, setError] = useState("");
+  const [bodyFeeling, setBodyFeeling] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 启动时检查今日缓存报告
@@ -66,7 +67,7 @@ export default function MorningPage() {
       const res = await fetch("/api/generate-report", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...watchData, force }),
+        body: JSON.stringify({ ...watchData, force, body_feeling: bodyFeeling || undefined }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? "生成失败");
@@ -238,6 +239,20 @@ export default function MorningPage() {
               无手表数据，将根据时辰生成基础报告
             </p>
           )}
+
+          {/* 身体感受输入 */}
+          <div className="space-y-2">
+            <label className="block font-serif text-xs text-ink-600 text-center">
+              今天身体感觉如何？（选填）
+            </label>
+            <textarea
+              value={bodyFeeling}
+              onChange={(e) => setBodyFeeling(e.target.value)}
+              placeholder="比如：昨晚做梦了、肩膀有点酸、精神不错、喉咙干..."
+              rows={2}
+              className="w-full resize-none border border-ink-200 bg-ink-50 px-3 py-2 font-serif text-sm text-ink-800 placeholder:text-ink-400 focus:border-ink-400 focus:outline-none"
+            />
+          </div>
 
           {error && (
             <p className="font-serif text-sm text-red-600">{error}</p>

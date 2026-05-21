@@ -35,6 +35,13 @@ export default function Home() {
           它不替你住进庙里 — 它只是替你守夜，让你回家的时候，灯还亮着。
         </p>
 
+        <Link
+          href="/checkin"
+          className="inline-flex items-center justify-center rounded-none border border-ink-400 px-6 py-2 font-serif text-xs tracking-widest text-ink-600 transition hover:border-ink-800 hover:text-ink-900"
+        >
+          随时问身
+        </Link>
+
         <div className="flex items-center justify-center gap-6 pt-2">
           <Link href="/sleep" className="text-xs text-ink-400 underline-offset-4 hover:text-ink-600 hover:underline">
             睡前记录
