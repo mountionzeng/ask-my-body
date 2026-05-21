@@ -139,12 +139,15 @@ ${yinshiAnalysis ? `【寅时守夜】\n${yinshiAnalysis.content}` : "（寅时�
   `.trim();
 
   const systemPrompt = loadSystemPrompt();
-  const content = await streamText({
+  const rawContent = await streamText({
     model: MODELS.morningGuide,
     system: systemPrompt,
     userMessage,
     maxTokens: 1400,
   });
+
+  // 防御：如果模型仍然返回了 JSON，自动转为 Markdown 散文
+  const content = ensureMarkdown(rawContent, today, shichen.name);
 
   const report: MorningReport = {
     date: today,
@@ -172,4 +175,66 @@ function getPulseMeaning(pulse: string): string {
     虚脉: "主虚证，气血两虚",
   };
   return dict[pulse] ?? "请结合整体状态综合判断";
+}
+
+/**
+ * 万能防御：检测模型是否输出了 JSON，自动转为可读 Markdown
+ * 正常情况下模型应直接返回 Markdown，此函数作为兜底
+ */
+function ensureMarkdown(raw: string, date: string, shichen: string): string {
+  // 去掉代码块包裹
+  const stripped = raw
+    .replace(/^```(?:json)?\s*\n?/m, "")
+    .replace(/\n?```\s*$/m, "")
+    .trim();
+
+  // 尝试解析 JSON
+  let data: Record<string, unknown>;
+  try {
+    data = JSON.parse(stripped);
+  } catch {
+    // 不是 JSON，原样返回（正常路径）
+    return raw;
+  }
+
+  // 是 JSON — 把内容拼成 Markdown 散文
+  const lines: string[] = [];
+  lines.push("---", "");
+  lines.push(`## 今晨问身 · ${date}`, "");
+
+  if (data.greeting) lines.push(`> ${data.greeting}`, "");
+
+  lines.push("### 昨夜身体报告", "");
+  const sleep = data.sleep_summary as Record<string, unknown> | undefined;
+  if (sleep?.comment) {
+    lines.push(String(sleep.comment), "");
+  }
+
+  const pulse = data.pulse_summary as Record<string, unknown> | undefined;
+  if (pulse?.type) {
+    lines.push(`**脉象：${pulse.type}**  `);
+    if (pulse.interpretation) lines.push(String(pulse.interpretation), "");
+  }
+
+  const focus = data.today_focus as unknown[];
+  if (Array.isArray(focus) && focus.length) {
+    lines.push("### 今日养生建议", "");
+    focus.forEach((item, i) => {
+      lines.push(`**建议 ${i + 1}**  `);
+      lines.push(String(item), "");
+    });
+  }
+
+  lines.push("### 今日时辰提醒", "");
+  lines.push(
+    `> ${shichen} · ${data.zang_focus ?? ""} · ${
+      (data as Record<string, unknown>).shichen_advice ?? "顺应时辰，安养身心"
+    }`,
+    ""
+  );
+
+  lines.push("---", "");
+  lines.push("*非医疗建议 · 自愿参考 · 身体是你自己的庙*");
+
+  return lines.join("\n");
 }

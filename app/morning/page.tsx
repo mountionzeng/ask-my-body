@@ -348,6 +348,8 @@ function fmtMin(m: number): string {
 }
 
 function markdownToHtml(md: string): string {
+  // 剥掉可能残留的代码块包裹
+  md = md.replace(/^```(?:json|markdown)?\s*\n?/m, "").replace(/\n?```\s*$/m, "").trim();
   return md
     .replace(/^---$/gm, '<hr class="border-ink-100 my-4" />')
     .replace(
