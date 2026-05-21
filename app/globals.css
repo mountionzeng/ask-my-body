@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap");
+
+:root {
+  --bg: #fafaf9;
+  --fg: #1c1917;
+  --muted: #a8a29e;
+  --hairline: #e7e5e4;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-feature-settings: "ss01", "cv11";
+}
+
+body {
+  font-family: "Inter", "Noto Serif SC", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.ink-divider {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--hairline) 20%,
+    var(--hairline) 80%,
+    transparent
+  );
+}
