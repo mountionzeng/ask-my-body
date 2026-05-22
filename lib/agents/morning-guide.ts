@@ -145,12 +145,18 @@ ${yinshiAnalysis ? `【寅时守夜】\n${yinshiAnalysis.content}` : "（寅时�
 报告中 date 使用：${today}
   `.trim();
 
+  // 没有手表数据时（仅有 body_feeling）使用更快的模型 + 更少 token，
+  // 避免 Vercel Hobby 10 秒 serverless 超时
+  const hasWatchData = hrv != null || sleep_hours != null || rhr != null || input.pulse_diagnosis != null;
+  const model = hasWatchData ? MODELS.morningGuide : MODELS.nightWatcher;
+  const maxTokens = hasWatchData ? 2000 : 900;
+
   const systemPrompt = loadSystemPrompt();
   const rawContent = await streamText({
-    model: MODELS.morningGuide,
+    model,
     system: systemPrompt,
     userMessage,
-    maxTokens: 2000,
+    maxTokens,
   });
 
   // 防御：如果模型仍然返回了 JSON，自动转为 Markdown 散文

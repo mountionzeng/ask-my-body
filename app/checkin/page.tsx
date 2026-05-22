@@ -62,9 +62,15 @@ export default function CheckinPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ body_feeling: feeling, force: true }),
       });
-      const json = await res.json();
+      const text = await res.text();
+      let json: { report?: CheckinReport; error?: string };
+      try {
+        json = JSON.parse(text);
+      } catch {
+        throw new Error(res.status === 504 ? "生成超时，请稍后重试" : "服务暂时不可用，请稍后重试");
+      }
       if (!res.ok) throw new Error(json.error ?? "生成失败");
-      setReport(json.report);
+      setReport(json.report!);
       setStep("done");
       saveReportLocal({ ...json.report });
     } catch (e) {
