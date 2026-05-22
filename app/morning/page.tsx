@@ -28,9 +28,9 @@ export default function MorningPage() {
 
   useEffect(() => {
     fetch("/api/wake-up")
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.ok && json.report) { setReport(json.report); setStep("done"); }
+      .then((res) => res.text())
+      .then((text) => {
+        try { const json = JSON.parse(text); if (json.ok && json.report) { setReport(json.report); setStep("done"); } } catch { /* ignore non-JSON */ }
       })
       .catch(() => {});
   }, []);
@@ -45,9 +45,15 @@ export default function MorningPage() {
     Array.from(files).slice(0, 3).forEach((f) => formData.append("images", f));
     try {
       const res = await fetch("/api/parse-watch", { method: "POST", body: formData });
-      const json = await res.json();
+      const text = await res.text();
+      let json: { data?: WatchData; error?: string };
+      try {
+        json = JSON.parse(text);
+      } catch {
+        throw new Error(res.status === 504 ? "识别超时，请稍后重试" : "服务暂时不可用，请稍后重试");
+      }
       if (!res.ok) throw new Error(json.error ?? "识别失败");
-      setWatchData(json.data);
+      setWatchData(json.data ?? null);
       setStep("ready");
     } catch (e) {
       setError(String(e));
@@ -64,12 +70,18 @@ export default function MorningPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...watchData, force, body_feeling: bodyFeeling || undefined, dream: dreamText || undefined }),
       });
-      const json = await res.json();
+      const text = await res.text();
+      let json: { report?: MorningReport; error?: string };
+      try {
+        json = JSON.parse(text);
+      } catch {
+        throw new Error(res.status === 504 ? "生成超时，请稍后重试" : "服务暂时不可用，请稍后重试");
+      }
       if (!res.ok) throw new Error(json.error ?? "生成失败");
-      setReport(json.report);
+      setReport(json.report!);
       setStep("done");
       saveReportLocal({
-        ...json.report,
+        ...json.report!,
         hrv: watchData?.hrv_ms ?? undefined,
         rhr: watchData?.heart_rate_bpm ?? undefined,
         sleep_hours: watchData?.total_sleep_hours ?? undefined,

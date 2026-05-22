@@ -66,6 +66,13 @@ export default function Home() {
 
         <div className="mt-6 flex items-center justify-center gap-3.5 text-[12px] tracking-wider text-ink-400">
           <Link
+            href="/chunfeng"
+            className="border-b border-dotted border-ink-300/40 pb-0.5 text-ink-500 hover:text-ink-800"
+          >
+            问春风
+          </Link>
+          <span className="text-ink-300">·</span>
+          <Link
             href="/sleep"
             className="border-b border-dotted border-ink-300/40 pb-0.5 text-ink-500 hover:text-ink-800"
           >

@@ -72,7 +72,7 @@ export default function CheckinPage() {
       if (!res.ok) throw new Error(json.error ?? "生成失败");
       setReport(json.report!);
       setStep("done");
-      saveReportLocal({ ...json.report });
+      saveReportLocal({ ...json.report! });
     } catch (e) {
       setError(String(e));
       setStep("input");
