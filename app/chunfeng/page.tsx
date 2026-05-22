@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { BambooDecoration, WashBlob } from "@/components/decorations";
 
 const BAZI_KEY = "spring-wind:bazi";
@@ -23,6 +23,9 @@ export default function ChunFengPage() {
   const [city, setCity] = useState("");
   const [report, setReport] = useState<SpringWindReport | null>(null);
   const [error, setError] = useState("");
+  const [parsing, setParsing] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   // Restore saved inputs
   useEffect(() => {
@@ -86,6 +89,35 @@ export default function ChunFengPage() {
       }
     };
     reader.readAsText(file);
+  }
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Show preview
+    setImagePreview(URL.createObjectURL(file));
+    setParsing(true);
+    setError("");
+
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      const res = await fetch("/api/parse-bazi", { method: "POST", body: formData });
+      const text = await res.text();
+      let json: { ok?: boolean; data?: { bazi: string; extra_info?: string }; error?: string };
+      try {
+        json = JSON.parse(text);
+      } catch {
+        throw new Error("识别服务暂时不可用，请手动输入");
+      }
+      if (!res.ok || !json.data?.bazi) throw new Error(json.error ?? "未能识别八字信息");
+      setBazi(json.data.bazi);
+    } catch (err) {
+      setError(String(err));
+    } finally {
+      setParsing(false);
+    }
   }
 
   return (
@@ -162,8 +194,42 @@ export default function ChunFengPage() {
                     onChange={handleFileUpload}
                   />
                 </label>
-                <span className="text-[10px]" style={{ color: "#aaa89e" }}>支持 .txt 文件</span>
+                <span style={{ color: "#c0b8a8" }}>·</span>
+                <button
+                  onClick={() => imageInputRef.current?.click()}
+                  className="cursor-pointer text-[11px] tracking-wider hover:opacity-80"
+                  style={{ color: "#6e8a66" }}
+                >
+                  <span className="border-b border-dotted pb-px" style={{ borderColor: "rgba(110,138,102,0.5)" }}>
+                    拍照/截图识别
+                  </span>
+                </button>
+                <input
+                  ref={imageInputRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  className="hidden"
+                  onChange={handleImageUpload}
+                />
               </div>
+
+              {/* Image parsing state */}
+              {parsing && (
+                <div className="flex items-center gap-2 rounded-[3px] border px-3 py-2" style={{ borderColor: "rgba(110,138,102,0.3)", background: "rgba(168,196,160,0.1)" }}>
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full" style={{ background: "#6e8a66" }} />
+                  <span className="text-[11px]" style={{ color: "#5a6a50" }}>正在识别八字信息...</span>
+                </div>
+              )}
+
+              {/* Image preview */}
+              {imagePreview && !parsing && (
+                <div className="flex items-center gap-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={imagePreview} alt="八字图片" className="h-14 w-auto rounded border object-cover" style={{ borderColor: "rgba(110,138,102,0.3)" }} />
+                  <span className="text-[11px]" style={{ color: "#6e8a66" }}>已从图片识别八字</span>
+                </div>
+              )}
             </div>
 
             {/* City input */}
