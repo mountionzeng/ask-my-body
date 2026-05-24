@@ -10,7 +10,7 @@ import { runSpringWind } from "@/lib/agents/spring-wind";
 export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
-  let body: { bazi?: string; city?: string; force?: boolean } = {};
+  let body: { bazi?: string; city?: string; question?: string; force?: boolean } = {};
 
   try {
     body = await req.json();
@@ -29,6 +29,7 @@ export async function POST(req: NextRequest) {
     const report = await runSpringWind({
       bazi: body.bazi,
       city: body.city,
+      question: body.question,
       forceRegenerate: body.force,
     });
 

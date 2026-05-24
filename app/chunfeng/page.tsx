@@ -22,6 +22,7 @@ export default function ChunFengPage() {
   const [bazi, setBazi] = useState("");
   const [city, setCity] = useState("");
   const [report, setReport] = useState<SpringWindReport | null>(null);
+  const [question, setQuestion] = useState("");
   const [error, setError] = useState("");
   const [parsing, setParsing] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -60,7 +61,7 @@ export default function ChunFengPage() {
       const res = await fetch("/api/spring-wind", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ bazi, city, force: true }),
+        body: JSON.stringify({ bazi, city, question: question || undefined, force: true }),
       });
       const text = await res.text();
       let json: { report?: SpringWindReport; error?: string };
@@ -246,6 +247,28 @@ export default function ChunFengPage() {
                 className="w-full rounded-[3px] border px-3.5 py-3 text-[13px] leading-relaxed outline-none placeholder:opacity-50"
                 style={{
                   borderColor: "rgba(110,138,102,0.35)",
+                  background: "rgba(250,248,243,0.6)",
+                  color: "#2a3528",
+                }}
+              />
+            </div>
+
+            {/* Question input (optional) */}
+            <div>
+              <div className="mb-3 flex items-center text-[12px] font-medium tracking-super" style={{ color: "#3a4a32" }}>
+                <span className="mr-2 inline-block h-3 w-[3px]" style={{ background: "linear-gradient(180deg, #c8b888, #a89868)" }} />
+                问 事 儿
+                <span className="ml-2 text-[10px] font-normal tracking-wider" style={{ color: "#8a9880" }}>（可选）</span>
+                <span className="ml-auto font-display text-[11px] tracking-wider" style={{ color: "#8a9880" }}>iii.</span>
+              </div>
+              <textarea
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
+                placeholder="今天适合签合同吗？/ 今天出差顺利吗？/ 今天适合表白吗？"
+                rows={2}
+                className="w-full resize-none rounded-[3px] border px-3.5 py-3 text-[13px] leading-relaxed outline-none placeholder:opacity-50"
+                style={{
+                  borderColor: "rgba(200,184,136,0.4)",
                   background: "rgba(250,248,243,0.6)",
                   color: "#2a3528",
                 }}

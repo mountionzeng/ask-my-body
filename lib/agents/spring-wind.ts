@@ -29,6 +29,7 @@ function loadSystemPrompt(): string {
 export interface SpringWindInput {
   bazi: string;       // 八字原文
   city: string;       // 城市
+  question?: string;  // 问事儿（可选）
   forceRegenerate?: boolean;
 }
 
@@ -100,13 +101,16 @@ ${baziParsed.valid ? "" : "⚠️ 八字解析不完整，请基于可用信息�
 - 吉方：${directions.lucky.join("、")}
 - 凶方：${directions.avoid.join("、")}
 
+${input.question ? `用户今日想问的事：${input.question}` : "（用户未提出具体问事）"}
+
 请综合以上信息，生成「问春风」今日指南。
 注意：
 1. 每个建议都要有古籍引用出处
 2. 写出五行推演过程
 3. 结合${input.city}的气候特点给出接地气的建议
 4. 语气温润自然，如春风拂面
-5. 报告 date 使用：${today}
+${input.question ? `5. 在报告中增加「问事儿」专项分析，针对用户问的事（"${input.question}"），结合八字日主与今日天干地支的生克关系，判断今日做此事的吉凶，给出具体建议和古籍依据。如有不宜，给出化解之法或推荐更佳时机` : "5. 无需问事儿分析"}
+6. 报告 date 使用：${today}
   `.trim();
 
   const systemPrompt = loadSystemPrompt();
