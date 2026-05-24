@@ -6,7 +6,7 @@
 
 import { readFileSync } from "fs";
 import path from "path";
-import { streamText, MODELS } from "@/lib/claude";
+import { chatCompletion, MODELS } from "@/lib/claude";
 import { todayCST } from "@/lib/shichen";
 import {
   parseBaZi,
@@ -114,13 +114,11 @@ ${input.question ? `5. 在报告中增加「问事儿」专项分析，针对用
   `.trim();
 
   const systemPrompt = loadSystemPrompt();
-  // Use Sonnet for speed — Opus times out on Vercel's 60s limit
-  // with the long classical-text system prompt
-  const rawContent = await streamText({
-    model: MODELS.nightWatcher,
+  const rawContent = await chatCompletion({
+    model: MODELS.springWind,
     system: systemPrompt,
     userMessage,
-    maxTokens: 1200,
+    maxTokens: 1500,
   });
 
   // 防御 JSON 输出
@@ -129,7 +127,7 @@ ${input.question ? `5. 在报告中增加「问事儿」专项分析，针对用
   const report: SpringWindReport = {
     date: today,
     content,
-    model: MODELS.nightWatcher,
+    model: MODELS.springWind,
     generated_at: new Date().toISOString(),
     bazi: input.bazi,
     city: input.city,
