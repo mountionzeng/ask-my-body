@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/logo.png" width="132" height="132" alt="Ask My Body 求诸己 双竹 logo">
+</p>
+
 # Ask My Body｜求诸己
 
 > 身体会知道答案。求诸己，就是向内求——让 AI 帮你读懂昨晚的身体。

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>双竹 · 水墨竹林 Logo</title>
+<style>
+  :root { --cream:#f5f1e8; --panel:#faf8f3; --ink:#3a3028; --soft:#8a8078; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body {
+    font-family:"Noto Serif SC","Songti SC",serif; color:var(--ink);
+    background-color:var(--cream);
+    background-image:
+      repeating-linear-gradient(45deg, rgba(150,140,110,.04) 0 1px, transparent 1px 13px),
+      repeating-linear-gradient(-45deg, rgba(150,140,110,.04) 0 1px, transparent 1px 13px);
+    min-height:100vh; padding:40px 28px;
+  }
+  .head { text-align:center; margin-bottom:34px; }
+  .head h1 { font-size:20px; font-weight:600; letter-spacing:.16em; }
+  .head p  { font-size:11px; color:var(--soft); letter-spacing:.22em; margin-top:8px; }
+  .row { display:flex; flex-wrap:wrap; gap:30px; justify-content:center; align-items:flex-start; max-width:1000px; margin:0 auto; }
+  .cell { display:flex; flex-direction:column; align-items:center; gap:12px; }
+  .cap  { font-size:10px; letter-spacing:.24em; color:var(--soft); }
+  .panel { background:var(--panel); border:1px solid rgba(213,207,200,.7); border-radius:6px; padding:18px; box-shadow:0 1px 18px rgba(120,110,90,.06); }
+  .tile { border-radius:22px; overflow:hidden; box-shadow:0 4px 20px rgba(60,74,50,.18); background:var(--panel); display:flex; }
+  .scales { display:flex; align-items:flex-end; gap:20px; }
+  .scales .s { display:flex; flex-direction:column; align-items:center; gap:7px; }
+  .scales .s span { font-size:8px; color:var(--soft); }
+  .lockup { display:flex; align-items:center; gap:13px; }
+  .lockup .lt { font-size:18px; letter-spacing:.16em; line-height:1.25; }
+  .lockup .lt small { display:block; font-size:8px; letter-spacing:.32em; color:var(--soft); }
+  img { display:block; }
+</style>
+</head>
+<body>
+  <div class="head">
+    <h1>水墨竹林 · 双竹</h1>
+    <p>ASK MY BODY ・ 求诸己 ・ 主竹加粗 + 竹林加密</p>
+  </div>
+
+  <div class="row">
+    <div class="cell">
+      <div class="cap">主标 · 宣纸底</div>
+      <div class="panel"><img src="logo.svg" width="240" height="240" alt="logo"></div>
+    </div>
+    <div class="cell">
+      <div class="cap">App 图标 · 圆角砖</div>
+      <div class="tile"><img src="logo.svg" width="200" height="200" alt="icon"></div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top:34px;">
+    <div class="cell">
+      <div class="cap">缩小可读性</div>
+      <div class="scales">
+        <div class="s"><img src="logo.svg" width="64" height="64" alt=""><span>64</span></div>
+        <div class="s"><img src="logo.svg" width="44" height="44" alt=""><span>44</span></div>
+        <div class="s"><img src="logo.svg" width="32" height="32" alt=""><span>32</span></div>
+        <div class="s"><img src="logo.svg" width="20" height="20" alt=""><span>20</span></div>
+      </div>
+    </div>
+    <div class="cell">
+      <div class="cap">横向锁版</div>
+      <div class="lockup">
+        <img src="logo.svg" width="46" height="46" alt="">
+        <div class="lt">求诸己<small>ASK MY BODY</small></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
